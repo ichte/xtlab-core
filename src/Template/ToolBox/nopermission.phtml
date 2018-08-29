@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Xuân Thu CMS</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="d-flex p-4 h-100 w-100 bg-dark">
+<div class="container align-self-center">
+    <div class="card bg-light mb-3" >
+        <div class="card-header bg-danger text-light"><h1>NO - PERMISSION</h1></div>
+        <div class="card-body">
+            <h4 class="card-title">Contact Administrator</h4>
+            <p class="card-text">Không thực hiện được chức năng này.</p>
+            <p>Có thể có các nguyên nguyên nhân:</p>
+            <ul>
+                <li>Chưa đăng nhập</li>
+                <li>Không được cấp quyền</li>
+                <li>Tài nguyên không tồn tại</li>
+                <?
+                if ($mgs != null)
+                    echo "<li class='text-danger'>$mgs</li>";
+                ?>
+
+            </ul>
+        </div>
+        <div class="card-footer bg-transparent">
+            <a class="btn btn-warning" href="/">Trang chủ</a>
+            <a class="btn btn-success" href="/auth/">Đăng nhập</a></div>
+    </div>
+</div>
+</body>
+</html>
