@@ -3,10 +3,12 @@
 namespace XT\Core\Controller;
 
 
+use XT\Core\Common\Common;
+use Zend\EventManager\EventInterface as Event;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\ServiceManager\ServiceManager;
 
-class Controller extends AbstractActionController
+abstract class Controller extends AbstractActionController
 {
     /**
      * @var ServiceManager
@@ -23,5 +25,8 @@ class Controller extends AbstractActionController
         return $this;
     }
 
-    
+    public function defaultHeader()
+    {
+        Common::defaultHeader();
+    }
 }

@@ -1,0 +1,32 @@
+<?php
+/***
+ * @var $this PhpRenderer
+ */
+
+XT\Core\Common\Common::setCharsetUtf8();
+
+$this->headLink(['rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon',
+    'href' => $this->basePath('public/img/favicon.ico')]);
+
+
+echo $this->doctype(),PHP_EOL;
+echo '<html>
+<head>
+';
+echo $this->headMeta(),PHP_EOL;
+echo $this->headTitle(),PHP_EOL;
+echo $this->headLink(),PHP_EOL;
+echo $this->headScript(),PHP_EOL;
+echo $this->headStyle(),PHP_EOL;
+echo '</head>
+<body>
+';
+$this->blockHtml(\XT\Core\System\KeyView::HEADER); echo PHP_EOL;
+$this->blockHtml(\XT\Core\System\KeyView::NAVSIDEBAR); echo PHP_EOL;
+$this->blockHtml(\XT\Core\System\KeyView::CONTENT); echo PHP_EOL;
+$this->blockHtml(\XT\Core\System\KeyView::CONTENTASIDE); echo PHP_EOL;
+$this->blockHtml(\XT\Core\System\KeyView::FOOTER); echo PHP_EOL;
+echo $this->inlineScript();
+echo '</body>
+</html>';
+?>

@@ -6,6 +6,7 @@ use Zend\ServiceManager\ServiceManager;
 use Zend\Session\Config\SessionConfig;
 use Zend\Session\Container;
 use Zend\Session\SessionManager;
+use XT\Core\Common\Common;
 
 class Module
 {
@@ -18,7 +19,9 @@ class Module
         /***
          * @var $serviceManager ServiceManager
          */
-        Common::$sm     = $e->getApplication()->getServiceManager();
+        Common::$sm             = $e->getApplication()->getServiceManager();
+        Common::$app            = $e->getApplication();
+        Common::$em             = $e->getApplication()->getEventManager();
 
 
         //Init Session

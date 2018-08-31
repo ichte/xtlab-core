@@ -19,7 +19,7 @@ class MessageBox
         $phpRender = new PhpRenderer();
         $phpRender->setHelperPluginManager(Common::getViewHelper());
         $phpRender->setResolver(Common::builResolver()); 
-        $response->setContent($phpRender->render('ToolBox/nopermission', ['mgs' => $mgs]));
+        $response->setContent($phpRender->render('toolbox/nopermission', ['mgs' => $mgs]));
         return $response;
     }
 

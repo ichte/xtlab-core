@@ -1,14 +1,5 @@
 <?php
 return [
-    'view_manager'  =>  [
-        'template_path_stack' => [
-            __DIR__. '/../src/Template'
-
-        ],
-        'strategies' => [
-            'ViewJsonStrategy',
-        ],
-    ],
 
     'coresession' => [
         'remember_me_seconds' => 604800,
@@ -16,5 +7,7 @@ return [
         'use_cookies' => true,
         'cookie_httponly' => true,
         'name'=>'xtlab'
-    ]
+    ],
+    'view_helpers'  =>  include 'viewhelper.config.php',
+    'view_manager'  =>  include 'viewmanager.config.php',
 ];
