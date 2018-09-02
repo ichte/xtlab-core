@@ -1,0 +1,65 @@
+<?
+/**
+ * @var $this PhpRenderer
+ */
+?>
+<div class="p-4 w-100">
+    <?=$this->dropdownMenu()->setName('InsertHTML')->render([
+        'Layout Edit' => $this->url('admin', ['plugin' => 'layout', 'act' =>'layoutedit']),
+        'Holder' => $this->url('admin', ['plugin' => 'layout', 'act' =>'holder']),
+        'BlockLayout' => $this->url('admin', ['plugin' => 'layout', 'act' =>'applyblocklayout']),
+        'InsertHTML' => $this->url('admin', ['plugin' => 'layout', 'act' =>'eventinserthtml']),
+        'Home Slider' => $this->url('admin', ['plugin' => 'layout', 'act' =>'editslide']),
+        'PluginView' => $this->url('admin', ['plugin' => 'pluginview']),
+        'ListenerGlobal' => $this->url('admin', ['plugin' => 'pluginview', 'act' => 'listenerglobal']),
+
+    ])?>
+    <?
+    echo $this->pageBreadcrumbs()->setItems([
+        'Administrator' => $this->url('admin'),
+        'Layout' => $this->url('admin', ['plugin' => 'layout']),
+        'InsertHTML' => $this->url('admin', ['plugin' => 'layout', 'act'=>'eventinserthtml']),
+        'Edit' => ''
+    ])->render();
+    ?>
+
+
+    <div class="p-2 w-100">
+        <h5>Biên tập Event Insert HTML</h5>
+
+
+            <p class="lead">Event này được bắt khi sự kiện render trong View được thực hiện</p>
+            <?
+            $item = $this->event;
+            ?>
+            <form method="POST">
+                <div class="p-1">
+                    <div class="form-group">
+                        <label class="text-success">Controller+Action - Trang hiện thị</label>
+                        <?=$this->controlaction?>
+                    </div>
+                    <div class="form-group">
+                        <label class="text-success">Tên Event (khu vực hiện thị nội dung file HTML)</label>
+                        <?=$this->selectevent?>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="text-success">Tên block (file .phtml)</label>
+                        <?=$this->selectfile?>
+                    </div>
+                    <div class="form-group">
+                        <label>Trạng thái</label>
+                        <input name="active" type="checkbox" <?if ($item['active']) echo 'checked="checked"'?>/>
+
+
+                    </div>
+                    <div class="form-group">
+                        <button name="action" class="btn btn-success pull-right">Save</button>
+                        <input name="action" class="btn btn-success pull-right mr-1" value="Del" type="submit" />
+                    </div>
+
+                </div>
+            </form>
+
+
+</div>

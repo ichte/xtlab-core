@@ -1,3 +1,8 @@
+<?
+XT\Core\Common\Common::defaultHeader();
+XT\Core\Common\Common::headMetaNoIndex();
+?>
+<div class="m-4">
 <h1>An error occurred</h1>
 <h2><?= $this->message ?></h2>
 
@@ -5,7 +10,10 @@
     <?php if (isset($this->exception)
         && ($this->exception instanceof \Exception || $this->exception instanceof \Error)) : ?>
         <hr/>
-
+<?
+    $log = $this->exception->getMessage().' | '. $this->exception->getFile() . ' : ' .$this->exception->getLine();
+    XT\Core\Common\Common::logErr($log);
+?>
         <h2>Additional information:</h2>
         <h3><?= get_class($this->exception) ?></h3>
         <dl>
@@ -19,7 +27,16 @@
             </dd>
             <dt>Stack trace:</dt>
             <dd>
-                <pre><?= $this->escapeHtml($this->exception->getTraceAsString()) ?></pre>
+<pre>
+<?
+foreach ($this->exception->getTrace() as $item) {
+    if (isset($item['file']))
+    echo $item['file'],'(', $item['line'],')', PHP_EOL;
+
+}
+?>
+</pre>
+
             </dd>
         </dl>
 
@@ -61,3 +78,4 @@
         <h3>No Exception available</h3>
     <?php endif ?>
 <?php endif ?>
+</div>

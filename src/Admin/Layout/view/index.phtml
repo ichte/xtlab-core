@@ -1,0 +1,42 @@
+<?
+/**
+ * @var $this PhpRenderer
+ */
+?>
+<div class="w-100 m-4">
+    <?=$this->dropdownMenu()->setName('Layout')->render([
+        'Basic' => $this->url('admin', ['plugin' => 'basiccommand']),
+        'Layout' => $this->url('admin', ['plugin' => 'layout']),
+        'Trang riêng' => $this->url('admin', ['plugin' => 'literalpage']),
+        'Database' => $this->url('admin', ['plugin' => 'database']),
+        'PluginView' => $this->url('admin', ['plugin' => 'pluginview']),
+        'ListenerGlobal' => $this->url('admin', ['plugin' => 'pluginview', 'act' => 'listenerglobal']
+        ),
+
+    ])?>
+    <?
+    echo $this->pageBreadcrumbs()->setItems(
+        [
+            'Administrator'=> $this->url('admin'),
+            'Layout' => $this->url('admin', ['plugin'=>'layout']),
+        ]
+    )->render();
+
+    ?>
+    <h2 class="text-danger">Layout / HTML /EVENT</h2>
+
+    <div class="list-group w-100">
+
+        <?foreach ($list as $key => $ar):?>
+            <a href="<?=$this->url('admin', ['plugin' => 'layout', 'act' => $key])?>" class="list-group-item list-group-item-action flex-column align-items-start">
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1"><?=$this->translate($ar['name'])?></h5>
+                    <small class="text-muted"><?=$key?></small>
+                </div>
+                <p class="mb-1"><?=$this->translate($ar['description'])?></p>
+            </a>
+
+        <?endforeach;?>
+
+    </div>
+</div>

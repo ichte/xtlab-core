@@ -1,0 +1,63 @@
+<style>
+    .container {width: 100%;}
+</style>
+<div class="p-2 m-2 w-100">
+    <?
+    echo $this->pageBreadcrumbs()->setItems(
+        [
+            'Administrator'=> $this->url('admin'),
+            'Common' => $this->url('admin', ['plugin'=>'basiccommand']),
+        ]
+    )->render();
+
+    $listevents = [];
+    $listevents['file.delete'] = 'Khi xóa xong file';
+    $listevents['file.update'] = 'Cập nhật file';
+
+    $listevents['start-ahdesign-render-breadcrumbs'] = 'Breadcrumbs';
+    $listevents['end-ahdesign-render-breadcrumbs'] = 'Breadcrumbs';
+
+
+    $listevents['start-ahdesign-render-content_aside'] = 'content_aside';
+    $listevents['end-ahdesign-render-content_aside'] = 'content_aside';
+
+
+    $listevents['start-ahdesign-render-content'] = 'content';
+    $listevents['end-ahdesign-render-content'] = 'content';
+
+
+    $listevents['start-ahdesign-render-footer-layout'] = 'footer-layout';
+    $listevents['end-ahdesign-render-footer-layout'] = 'footer-layout';
+
+
+    $listevents['start-ahdesign-render-header-layout'] = 'header-layout';
+    $listevents['end-ahdesign-render-header-layout'] = 'header-layout';
+
+
+    $listevents['start-ahdesign-render-nav_sidebar'] = 'nav_sidebar';
+    $listevents['end-ahdesign-render-nav_sidebar'] = 'nav_sidebar';
+
+
+    $listevents['finish_render_menubartop'] = 'Điểm cuối của menubar';
+
+
+
+
+
+    ?>
+
+    <table class="table table-sm w-100">
+        <tr>
+            <th>Tên</th>
+            <th>Description</th>
+        </tr>
+        <?foreach ($listevents as $nameevent => $des):?>
+            <tr>
+                <td><?=$nameevent?></td>
+                <td><?=$des?></td>
+            </tr>
+        <?endforeach;?>
+
+
+    </table>
+</div>

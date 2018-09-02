@@ -1,0 +1,38 @@
+<?
+/***
+ * @var $this PhpRenderer
+ *
+ */
+if ($title == '')
+    $title = 'Notification';
+if (!isset($second)) $second = 2;
+$this->layout()->metaseo = [
+    'title' => $title,
+    'description' => '',
+    'keywords' =>'',
+    'noindex'  =>true
+];
+if ($this->url_redirect == '')
+    $this->url_redirect = $this->url('home', [], ['force_canonical' => true]);
+$this->headMeta()->appendHttpEquiv('Refresh',"$second;$this->url_redirect");
+?>
+<div class="p-4 w-100">
+    <div class="card">
+        <h4 class="card-header bg-dark text-white"><?=$title?></h4>
+        <div class="card-body p-2">
+            <?if ($this->mgs):?>
+                <ul>
+                    <?foreach ($this->mgs as $mgs_i):?>
+                        <li><?=$mgs_i?></li>
+                    <?endforeach?>
+                </ul>
+            <?else:?>
+                <ul>
+                    <li>Erorr</li>
+                </ul>
+            <?endif?>
+            <hr />
+            <p><?=$this->translate('Redirect')?> :<code><?=$this->url_redirect?></code></p>
+        </div>
+    </div>
+</div>

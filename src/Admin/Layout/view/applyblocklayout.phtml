@@ -1,0 +1,126 @@
+<?
+/**
+ * @var $this PhpRenderer
+ */
+?>
+<div class="p-4 w-100">
+    <?=$this->dropdownMenu()->setName('BlockLayout')->render([
+        'Layout Edit' => $this->url('admin', ['plugin' => 'layout', 'act' =>'layoutedit']),
+        'Holder' => $this->url('admin', ['plugin' => 'layout', 'act' =>'holder']),
+        'BlockLayout' => $this->url('admin', ['plugin' => 'layout', 'act' =>'applyblocklayout']),
+        'InsertHTML' => $this->url('admin', ['plugin' => 'layout', 'act' =>'eventinserthtml']),
+        'Home Slider' => $this->url('admin', ['plugin' => 'layout', 'act' =>'editslide']),
+        'PluginView' => $this->url('admin', ['plugin' => 'pluginview']),
+        'ListenerGlobal' => $this->url('admin', ['plugin' => 'pluginview', 'act' => 'listenerglobal']),
+
+
+    ])?>
+    <?
+    echo $this->pageBreadcrumbs()->setItems([
+        'Administrator' => $this->url('admin'),
+        'Layout' => $this->url('admin', ['plugin' => 'layout']),
+        'BlockLayout' => $this->url('admin', ['plugin' => 'layout', 'act'=>'applyblocklayout']),
+        //'Edit' => ''
+    ])->render();
+    ?>
+
+    <?
+
+        //**Get Controller List
+        $controls= \Common::$sm->get('config')['controllers'];
+        $controller = [];
+        foreach ($controls as $key => $cc) {
+            if (!isset($controller[$key]))
+                $controller[$key] = [];
+            foreach ($cc as $k=>$c)
+                $controller[$key][$k] =  $c;
+
+        }
+
+        $ctrllist = [];
+        foreach ($controller as $ctrl)
+        {
+            $ctrllist = array_merge($ctrllist, $ctrl);
+        }
+
+        $existcontroller = function ($ctrl) use ($ctrllist)
+        {
+            if ($ctrl == 'ALL') return true;
+            return isset($ctrllist[$ctrl]);
+        };
+
+    ?>
+
+    <div class="p-1 w-100">
+        <h5>CẬP NHẬT BLOCK LAYOUT</h5>
+        <p class="alert alert-warning">
+            Dữ liệu này được export tới file <strong>config/block-layout-config.php</strong> để <strong>onBootstrap</strong>
+            tải và tạo các Listener tương ứng khi để nội dung tại <strong>holder</strong> của template được chứa trong nội dung file template blockhtml.
+        </p>
+
+        <?
+        $list = $this -> listeventblock;//->get_array();
+        $color = 0;
+        $control = '';
+        $action = '';
+        $getclass = function($c,$a) use (&$color, &$control,&$action, $existcontroller)
+        {
+            if (!$existcontroller($c))
+                return 'bg-info text-dark';
+
+
+            if (($c != $control) || ($a != $action))
+            {
+                $control = $c;
+                $action = $a;
+                $color++;
+                if ($color > 1) $color = 0;
+            }
+            switch ($color)
+            {
+                case 0:
+                    return 'bg-light';
+                    break;
+                case 1:
+                    return '';
+                    break;
+            }
+
+
+        };
+        $ctrl = '';
+        ?>
+
+        <div class="row ml-1 mr-1" style="font-weight: bold;">
+            <div class="col-1 col-sm-1 col-md-1">#</div>
+            <div class="col-3 col-sm-3 col-md-3">Controller</div>
+            <div class="col-3 col-sm-3 col-md-3">Action</div>
+            <div class="col-2 col-sm-2 col-md-2">Block HTML</div>
+            <div class="col-2 col-sm-2 col-md-2">Holder</div>
+        </div>
+
+        <?foreach ($list as &$item) :?>
+            <?if ($ctrl != $item['Controller']) :?>
+                <?$ctrl = $item['Controller']?>
+
+            <?endif?>
+            <div class="row  ml-1 mr-1 <?=$getclass($item['Controller'],$item['Action'])?>" style="border-bottom: 1px solid whitesmoke; padding: 2px;">
+
+                <div class="col-3 col-sm-3 col-md-4"><a href="<?=$this->url('admin', ['plugin'=>'layout','id'=>$item['id'], 'act' => 'applyblocklayoutedit' ])?>" style="color:<? if($item['active']) echo '#333'; else echo 'silver';?>"><?=$item['Controller']?></a></div>
+                <div class="col-3 col-sm-3 col-md-2"><?=$item['Action']?></div>
+
+                <div class="col-4 col-sm-4 col-md-4"><?=$item['Block']?></div>
+                <div class="col-2 col-sm-2 col-md-2"><code><?=$item['holder']?></code></div>
+            </div>
+        <?endforeach?>
+        <hr>
+        <div style="text-align: right; padding: 10px;">
+            <form method="POST">
+                <a class="btn btn-success" href="<?=$this->url('admin', ['plugin'=>'layout', 'act' => 'applyblocklayoutedit'])?>">Thêm mới</a>
+                <input class="btn btn-success" type="submit" value="saveconfig" />
+            </form>
+        </div>
+
+    </div>
+
+</div>

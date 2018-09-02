@@ -1,0 +1,29 @@
+<?
+/**
+ * @var $this PhpRenderer
+ */
+?>
+<div class="w-100 p-2">
+<div class="card w-100">
+<h4 class="card-header bg-danger text-white"><?=$this->translate('Confirm!')?></h4>
+<div class="card-block p-4">
+   <form method="POST" action="<?=$urlpost?>">
+        <p><?=$this->translate($ask)?></p>
+       <div id="params">
+        <?foreach ($elementform as $key=>$val):?>
+            <input value="<?=$val?>" name="<?=$key?>" hidden="true" />
+        <?endforeach?>
+       </div>
+
+       <button class="btn btn-danger" value="OK" type="submit" name="buttonask"><?=$this->translate('Ok')?></button>
+       <button class="btn btn-secondary" value="CANCEL" type="submit" name="buttoncancel" onclick="removeparam();"><?=$this->translate('Cancel')?></button>
+   </form> 
+</div>
+</div>
+</div>
+
+<script>
+function removeparam() {
+    $('#params').detach();
+}
+</script>

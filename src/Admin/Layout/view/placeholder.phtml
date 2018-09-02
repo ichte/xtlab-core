@@ -1,0 +1,40 @@
+<?
+/**
+ * @var $this PhpRenderer
+ */
+?>
+<div class="p-4 w-100">
+    <?=$this->dropdownMenu()->setName('Holder')->render([
+        'Layout Edit' => $this->url('admin', ['plugin' => 'layout', 'act' =>'layoutedit']),
+        'Holder' => $this->url('admin', ['plugin' => 'layout', 'act' =>'holder']),
+        'BlockLayout' => $this->url('admin', ['plugin' => 'layout', 'act' =>'applyblocklayout']),
+        'InsertHTML' => $this->url('admin', ['plugin' => 'layout', 'act' =>'eventinserthtml']),
+        'Home Slider' => $this->url('admin', ['plugin' => 'layout', 'act' =>'editslide']),
+        'PluginView' => $this->url('admin', ['plugin' => 'pluginview']),
+        'ListenerGlobal' => $this->url('admin', ['plugin' => 'pluginview', 'act' => 'listenerglobal']),
+
+    ])?>
+    <?
+    echo $this->pageBreadcrumbs()->setItems([
+        'Administrator' => $this->url('admin'),
+        'Layout' => $this->url('admin', ['plugin' => 'layout']),
+        'Holder' => $this->url('admin', ['plugin' => 'layout', 'act'=>'holder']),
+    ])->render();
+    ?>
+
+<h3>Placeholders - <?=$this->translate('place send event while render HTML')?></h3>
+<div class="list-group w-100">
+    <?foreach ($this->listevent as $ev):?>
+        <a href="<?=$this->url('admin', ['plugin'=>'layout','act'=>'placeholder','id'=>$ev['placeholder_id']])?>" class="list-group-item">
+            <h4 class="list-group-item-heading"><?=$ev['name']?></h4>
+            <p class="list-group-item-text"><?=$ev['description']?></p>
+        </a>
+    <?endforeach?>
+</div>
+
+
+<div style="padding: 10px;">
+    <a class="btn btn-success" href="<?=$this->url('admin', ['plugin' => 'layout', 'act' =>'newholder'])?>"><?=' + '.$this->translate('Add')?></a>
+</div>
+
+</div>

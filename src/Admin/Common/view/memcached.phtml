@@ -1,0 +1,52 @@
+<style>
+    .container {width: 100%;}
+</style>
+<div class="p-2 m-2">
+    <?
+    echo $this->pageBreadcrumbs()->setItems(
+        [
+            'Administrator'=> $this->url('admin'),
+            'Common' => $this->url('admin', ['plugin'=>'basiccommand']),
+        ]
+    )->render();
+
+    $cache = Common::$cache;
+
+    if ($viewkey != null)
+    {
+       var_dump($cache->getItem($viewkey));
+    }
+
+
+    ?>
+
+
+    <h1 class="text-primary">MemCached Info</h1>
+    <strong>Dung lượng sử dụng: </strong>
+    <?=Common::formatBytes($cache->getAvailableSpace())?>/ <?=Common::formatBytes($cache->getTotalSpace())?>
+    <p>
+        <a href="<?=$this->url('admin', ['plugin'=>'basiccommand', 'act' =>'memcacheclear'])?>">Xóa memcached</a>
+    </p>
+    <h2>Số các mục cached:</h2>
+    <?
+        foreach ($data as $key => $d)
+        {
+            echo $key . ' : '. count($d) . ' mục<br>';
+        }
+    ?>
+
+    <h2>Danh sách keycache:</h2>
+    <?
+    foreach ($data as $key => $d)
+    {
+
+        echo '<strong>' . $key . ' : '. count($d) . ' mục </strong><hr>';
+        if ($key != 'memc')
+        foreach ($d as $i)
+            echo $i.'<hr>';
+
+    }
+    ?>
+
+
+</div>

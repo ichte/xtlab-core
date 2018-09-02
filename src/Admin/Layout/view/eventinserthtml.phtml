@@ -1,0 +1,129 @@
+<?
+/**
+ * @var $this PhpRenderer
+ */
+?>
+<div class="p-4 w-100">
+    <?=$this->dropdownMenu()->setName('InsertHTML')->render([
+        'Layout Edit' => $this->url('admin', ['plugin' => 'layout', 'act' =>'layoutedit']),
+        'Holder' => $this->url('admin', ['plugin' => 'layout', 'act' =>'holder']),
+        'BlockLayout' => $this->url('admin', ['plugin' => 'layout', 'act' =>'applyblocklayout']),
+        'InsertHTML' => $this->url('admin', ['plugin' => 'layout', 'act' =>'eventinserthtml']),
+        'Home Slider' => $this->url('admin', ['plugin' => 'layout', 'act' =>'editslide']),
+        'PluginView' => $this->url('admin', ['plugin' => 'pluginview']),
+        'ListenerGlobal' => $this->url('admin', ['plugin' => 'pluginview', 'act' => 'listenerglobal']),
+
+    ])?>
+    <?
+    echo $this->pageBreadcrumbs()->setItems([
+        'Administrator' => $this->url('admin'),
+        'Layout' => $this->url('admin', ['plugin' => 'layout']),
+        'InsertHTML' => $this->url('admin', ['plugin' => 'layout', 'act'=>'eventinserthtml']),
+        //'Edit' => ''
+    ])->render();
+    ?>
+
+
+    <div class="p-2 w-100">
+        <h5>Chèn HTML vào các sự kiện theo holder</h5>
+        <p class="alert alert-warning">
+            Dữ liệu này được export tới file <strong>config/block-html-config.php</strong> để <strong>onBootstrap</strong>
+            tải và tạo các Listener tương ứng khi để nội dung file HTML chèn tại <strong>holder</strong> phát đi sự kiện.
+        </p>
+
+        <?
+        $list = $this -> listeventblock;
+        $color = 0;
+        $control = '';
+        $action = '';
+        $getclass = function($c,$a) use (&$color, &$control,&$action)
+        {
+            if (($c != $control) || ($a != $action))
+            {
+                $control = $c;
+                $action = $a;
+                $color++;
+                if ($color > 1) $color = 0;
+            }
+            switch ($color)
+            {
+                case 0:
+                    return 'bg-light';
+                    break;
+                case 1:
+                    return '';
+                    break;
+            }
+
+
+        };
+
+        $controls= \Common::$sm->get('config')['controllers'];
+        $controller = [];
+        foreach ($controls as $key => $cc) {
+            if (!isset($controller[$key]))
+                $controller[$key] = [];
+            foreach ($cc as $k=>$c)
+                $controller[$key][$k] =  $c;
+
+        }
+        $ctrllist = [];
+        foreach ($controller as $ctrl)
+        {
+            $ctrllist = array_merge($ctrllist, $ctrl);
+        }
+
+        $existcontroller = function ($ctrl) use ($ctrllist)
+        {
+            return isset($ctrllist[$ctrl]);
+        };
+
+        $ctrl = '';
+
+
+
+        ?>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Controller</th>
+                <th>Action</th>
+                <th>Event</th>
+                <th>Block HTML</th>
+            </tr>
+            </thead>
+
+
+
+            <?foreach ($list as &$item) :?>
+                <?if ($ctrl != $item['Controller']) :?>
+                    <?$ctrl = $item['Controller']?>
+                <?endif?>
+
+                <tr class="<?=$getclass($item['Controller'],$item['Action'])?>">
+                    <td><a href="<?=$this->url('admin', ['plugin'=>'layout','act' => 'eventinserthtmledit', 'id'=>$item['id']])?>"
+                           style="color:<? if($item['active']) echo 'black'; else echo 'silver';?>">
+                            <?=$item['Controller']?></a>
+                        <?if (!($existcontroller($item['Controller']))) echo "<i class=\"fa fa-eye-slash\" aria-hidden=\"true\"></i>";?>
+
+                    </td>
+                    <td><?=$item['Action']?></td>
+                    <td><?=$item['Event']?></td>
+                    <td><?=$item['Block']?></td>
+                </tr>
+
+
+            <?endforeach?>
+        </table>
+
+
+
+        <div style="padding: 20px; text-align: right;">
+            <form method="POST">
+                <a class="btn btn-warning" href="<?=$this->url('admin', ['plugin'=>'layout', 'act' => 'eventinserthtmledit'])?>">+ Thêm Event Insert HTML</a>
+                <input class="btn btn-success" type="submit" value="Export Config" />
+            </form>
+        </div>
+    </div>
+
+</div>

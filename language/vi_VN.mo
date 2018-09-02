@@ -1,0 +1,27 @@
+<?
+return [
+    'Manager layout (.phtml)' =>                                                        'Quản lý các Layout (.phtml)',
+    'Administrator CP' =>                                                               'Quản trị website',
+    'Edit .phtml (template) files' =>                                                   'Chỉnh sửa .phtml tích hợp vào website',
+    'PlaceHolder for View, mocking events, insert block HTML ...' =>                    'Các PlaceHolder nơi để hiện thị HTML, gửi sự kiện trong View ...',
+    'Basic Settings' =>                                                                 'Thiết lập cơ bản',
+    'Confirm!' =>                                                                       'Xác nhận!',
+    'Cancel' =>                                                                         'Hủy bỏ',
+    'Ok' =>                                                                             'Đồng ý',
+    'Are you sure to delete?' =>                                                        'Có chắc chắn xóa?',
+    'Clear Logs' =>                                                                     'Xóa Log',
+    'Not permission granted'=>                                                          'Không phân quyền',
+    'Contact to administrator'=>                                                        'Liên hệ quản trị',
+    'The task does not work because some reasons'=>                                     'Tác vụ không thực hiện vì nguyên nhân',
+    'Home'=>                                                                            'Trang chủ',
+    'Login'=>                                                                           'Đăng nhập',
+    'Notification' =>                                                                   'Thông báo',
+    'Not found' =>                                                                      'Không thấy',
+    'Add'=>                                                                             'Thêm',
+    'place send event while render HTML'=>                                              'Nơi gửi sự kiện và móc nối HTML',
+    'Name'=>                                                                            'Tên',
+    'Description'=>                                                                     'Mô tả',
+    'Save'=>                                                                            'Lưu',
+    'Delete'=>                                                                          'Xóa',
+    'Redirect' =>                                                                       'Chuyển hướng'
+];

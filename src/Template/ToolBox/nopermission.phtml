@@ -1,3 +1,10 @@
+<?
+/***
+ * @var $this PhpRenderer
+ */
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,15 +16,14 @@
 <body class="d-flex p-4 h-100 w-100 bg-dark">
 <div class="container align-self-center">
     <div class="card bg-light mb-3" >
-        <div class="card-header bg-danger text-light"><h1>NO - PERMISSION</h1></div>
+        <div class="card-header bg-danger text-light"><h1><?=$this->translate('Not permission granted')?></h1></div>
         <div class="card-body">
-            <h4 class="card-title">Contact Administrator</h4>
-            <p class="card-text">Không thực hiện được chức năng này.</p>
-            <p>Có thể có các nguyên nguyên nhân:</p>
+            <h4 class="card-title"><?=$this->translate('Contact to administrator')?></h4>
+            <p><?=$this->translate('The task does not work because some reasons')?>:</p>
             <ul>
-                <li>Chưa đăng nhập</li>
-                <li>Không được cấp quyền</li>
-                <li>Tài nguyên không tồn tại</li>
+                <li>Not Login</li>
+                <li>Not Role</li>
+                <li>Resources not exist!</li>
                 <?
                 if ($mgs != null)
                     echo "<li class='text-danger'>$mgs</li>";
@@ -26,8 +32,8 @@
             </ul>
         </div>
         <div class="card-footer bg-transparent">
-            <a class="btn btn-warning" href="/">Trang chủ</a>
-            <a class="btn btn-success" href="/auth/">Đăng nhập</a></div>
+            <a class="btn btn-warning" href="/"><?=$this->translate('Home')?></a>
+            <a class="btn btn-success" href="/auth/"><?=$this->translate('Login')?></a></div>
     </div>
 </div>
 </body>

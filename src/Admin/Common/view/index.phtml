@@ -1,0 +1,31 @@
+<?
+/**
+ * @var $this PhpRenderer
+ */
+?>
+<div class="w-100 m-4">
+    <?
+    echo $this->pageBreadcrumbs()->setItems(
+        [
+            'Administrator'=> $this->url('admin'),
+            'Common' => $this->url('admin', ['plugin'=>'basiccommand']),
+        ]
+    )->render();
+    ?>
+    <h2 class="text-danger"><?=$this->translate('Basic Settings')?></h2>
+
+    <div class="list-group w-100">
+
+        <?foreach ($list as $key => $ar):?>
+            <a href="<?=$this->url('admin', ['plugin' => 'basiccommand', 'act' => $key])?>" class="list-group-item list-group-item-action flex-column align-items-start">
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1"><?=$ar['name']?></h5>
+                    <small class="text-muted"><?=$key?></small>
+                </div>
+                <p class="mb-1"><?=$ar['description']?></p>
+            </a>
+
+        <?endforeach;?>
+
+    </div>
+</div>

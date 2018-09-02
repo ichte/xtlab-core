@@ -2,8 +2,10 @@
 /***
  * @var $this PhpRenderer
  */
+use XT\Core\Common\Common;
+use XT\Core\System\KeyView;
 
-XT\Core\Common\Common::setCharsetUtf8();
+Common::setCharsetUtf8();
 
 $this->headLink(['rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon',
     'href' => $this->basePath('public/img/favicon.ico')]);
@@ -21,11 +23,16 @@ echo $this->headStyle(),PHP_EOL;
 echo '</head>
 <body>
 ';
-$this->blockHtml(\XT\Core\System\KeyView::HEADER); echo PHP_EOL;
-$this->blockHtml(\XT\Core\System\KeyView::NAVSIDEBAR); echo PHP_EOL;
-$this->blockHtml(\XT\Core\System\KeyView::CONTENT); echo PHP_EOL;
-$this->blockHtml(\XT\Core\System\KeyView::CONTENTASIDE); echo PHP_EOL;
-$this->blockHtml(\XT\Core\System\KeyView::FOOTER); echo PHP_EOL;
+$this->blockHtml(KeyView::HEADER); echo PHP_EOL;
+
+echo "<div ", Common::getBags()->Container,">";
+$this->blockHtml(KeyView::NAVSIDEBAR); echo PHP_EOL;
+$this->blockHtml(KeyView::CONTENT); echo PHP_EOL;
+$this->blockHtml(KeyView::CONTENTASIDE); echo PHP_EOL;
+echo "</div>";
+
+
+$this->blockHtml(KeyView::FOOTER); echo PHP_EOL;
 echo $this->inlineScript();
 echo '</body>
 </html>';

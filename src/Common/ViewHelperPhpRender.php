@@ -33,10 +33,7 @@ trait ViewHelperPhpRender
         $resolver = new AggregateResolver();
         return $resolver
             ->attach(self::getTemplateMapResolver())
-            ->attach(self::getTemplatePathStack());
-
-        
-
+            ->attach(self::getTemplatePathStack()); 
     }
 
 }

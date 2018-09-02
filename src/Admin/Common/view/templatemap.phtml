@@ -1,0 +1,41 @@
+<style>
+    .container {width: 100%;}
+</style>
+<div class="p-2 m-2">
+    <?
+    echo $this->pageBreadcrumbs()->setItems(
+        [
+            'Administrator'=> $this->url('admin'),
+            'Common' => $this->url('admin', ['plugin'=>'basiccommand']),
+        ]
+    )->render();
+    ?>
+
+    <?php
+    /**
+     * @var PhpRenderer $this
+     */
+
+    /**
+     * @var \Zend\Router\Http\TreeRouteStack $route;
+     * @var \Zend\Router\Http\Literal $routeliteral;
+     */
+
+    $viewmanager = \Common::$sm->get('config')['view_manager'];
+
+
+    ?>
+
+    <h2 class="text-danger">Các Template Map</h2>
+    <ul>
+        <?
+        foreach ($viewmanager['template_map'] as $key => $val) {
+            echo "<li><code>$key</code>    <i>$val</i></li>";
+
+            }
+        ?>
+    </ul>
+    <h2 class="text-danger">template_path_stack</h2>
+    <?=$this->htmlList($viewmanager['template_path_stack'], false)?>
+
+</div>

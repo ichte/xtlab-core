@@ -14,8 +14,10 @@ class Module
     {
         return include __DIR__ . '/../config/module.config.php';
     }
+
     public function onBootstrap(MvcEvent $e)
     {
+        Common::set_error_handler();
         /***
          * @var $serviceManager ServiceManager
          */
@@ -24,12 +26,20 @@ class Module
         Common::$em             = $e->getApplication()->getEventManager();
 
 
-        //Init Session
+        //INIT / START SESSION
         $coresession = Common::$sm->get('config')['coresession'];
         $sessionConfig = new SessionConfig();
         $sessionConfig->setOptions($coresession);
         $sessionManager = new SessionManager($sessionConfig);
         Container::setDefaultManager($sessionManager);
         $sessionManager->start();
+ 
+
+        //LISTENER DISPATCH
+        Common::$em->attach("dispatch", 'XT\Core\Module::onDispatchController', -100);
+    }
+
+    public static function onDispatchController(MvcEvent $e) {
+
     }
 }

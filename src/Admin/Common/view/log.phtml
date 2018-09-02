@@ -1,0 +1,49 @@
+<?
+/***
+ * @var $this PhpRenderer
+ * @var $log \XT\Core\Admin\Common\Log
+ */
+?>
+
+
+
+
+<div class="p-2 m-2">
+    <?
+    echo $this->pageBreadcrumbs()->setItems(
+        [
+            'Administrator'=> $this->url('admin'),
+            'Basic Setting' => $this->url('admin', ['plugin'=>'basiccommand']),
+            'Logs' => $this->url('admin', ['plugin'=>'basiccommand']),
+        ]
+    )->render();
+    ?>
+
+    <?=count($logs)?>
+    <table class="table table-bordered">
+        <tr>
+            <th>Date</th>
+            <th>Type</th>
+            <th>Message</th>
+        </tr>
+
+        <? foreach ($logs as $log):?>
+            <tr>
+                <td><?=$log->getDate()?></td>
+                <td><?=$log->getType()?></td>
+                <td><?=$log->getEvent()?></td>
+            </tr>
+        <?endforeach;?>
+
+    </table>
+
+    <div class="p-4">
+        <a class="btn btn-danger"
+           href="<?=$this->url('admin', ['plugin'=>'basiccommand', 'act'=>'log'],
+               ['query' => ['action'=>'clear']])?>">
+            <?=$this->translate('Clear Logs')?>
+        </a>
+    </div>
+
+</div>
+

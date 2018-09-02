@@ -1,0 +1,107 @@
+<style>
+    .container {width: 100%;}
+</style>
+<div class="p-2 m-2">
+    <?
+    echo $this->pageBreadcrumbs()->setItems(
+        [
+            'Administrator'=> $this->url('admin'),
+            'Common' => $this->url('admin', ['plugin'=>'basiccommand']),
+        ]
+    )->render();
+    ?>
+
+    <?php
+    /**
+     * @var PhpRenderer $this
+     * @var \Ichte\Core\Lib\Cache\Memcached $cache
+     */
+
+    $cache = Common::$cache;
+
+    /**
+     * @var \Zend\Router\Http\TreeRouteStack $route;
+     * @var \Zend\Router\Http\Literal $routeliteral;
+     */
+    $router = \Common::$sm->get('config')['router'];
+    $routerlist = [];
+    foreach ($router as $item) {
+        foreach ($item as $key => $value)
+        {
+            $routerlist[] = sprintf("%s : % s => %s",$value['type'], $key, $value['options']['route']);
+        }
+
+    }
+
+
+    $controls= \Common::$sm->get('config')['controllers'];
+    $controller = [];
+    foreach ($controls as $key => $cc) {
+        if (!isset($controller[$key]))
+            $controller[$key] = [];
+        foreach ($cc as $k=>$c)
+            $controller[$key][] = $k . '=>' . $c;
+
+    }
+    ?>
+
+    <h1 class="text-primary">LIST INFOMATION OF SYSTEM</h1>
+    <?=Common::formatBytes($cache->getTotalSpace())?>/
+    <?=Common::formatBytes($cache->getAvailableSpace())?>
+
+
+    <h2 class="text-danger">List modules Define</h2>
+    <?=$this->htmlList(\Common::$mm->getModules(), true)?>
+    <h2 class="text-danger">Router</h2>
+    <?=$this->htmlList($routerlist, true)?>
+    <h2 class="text-danger">Controller</h2>
+    <?foreach ($controller as $key => $c):?>
+        <h3><?=$key?></h3>
+        <?=$this->htmlList($c, true)?>
+    <?endforeach;?>
+    <h2 class="text-danger">Databases</h2>
+
+    <h2 class="text-danger">$GLOBALS</h2>
+    <?
+    echo "<pre>";
+    print_r($GLOBALS);
+    echo "</pre>";
+    ?>
+
+    <h2 class="text-danger">Session</h2>
+    <?
+    echo "<pre>";
+    print_r($_SESSION);
+    echo "</pre>";
+    ?>
+    <h2 class="text-danger">Cookies</h2>
+    <?
+    echo "<pre>";
+    print_r($_COOKIE);
+    echo "</pre>";
+    ?>
+    <h2 class="text-danger">Request</h2>
+    <?
+    echo "<pre>";
+    print_r($_REQUEST);
+    echo "</pre>";
+    ?>
+
+    <h2 class="text-danger">ENV</h2>
+    <?
+    echo "<pre>";
+    print_r($_ENV);
+    echo "</pre>";
+    ?>
+
+    <h2 class="text-danger">CONFIG</h2>
+    <?
+    echo "<pre>";
+    print_r(\Common::$sm->get('config'));
+    echo "</pre>";
+
+    ?>
+
+
+</div>
+

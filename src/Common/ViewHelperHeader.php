@@ -40,6 +40,10 @@ trait ViewHelperHeader
         return $headmeta;
     }
 
+    public static function headMetaNoIndex() {
+        self::headMeta('robots', 'noindex');
+    }
+
     /***
      * @param string $content
      * @param bool $append

@@ -1,0 +1,102 @@
+<style>
+    .container {width: 100% !important; max-width: 100% !important}
+</style>
+<?
+/**
+ * @var $this PhpRenderer
+ */
+echo $this->pageBreadcrumbs()->setItems(
+    [
+        'Administrator'=> $this->url('admin'),
+        'Common' => $this->url('admin', ['plugin'=>'basiccommand']),
+        'Help' => $this->url('admin', ['plugin'=>'basiccommand']),
+    ]
+)->render();
+?>
+
+<ul class="list-group w-100 p-4">
+    <li class="list-group-item">
+        <p><strong class="text-danger">Đổi template trong View</strong></p>
+<pre>$this->layout()->setTemplate('layoutmain/new-template');</pre>
+    </li>
+
+    <li class="list-group-item">
+        <p><strong class="text-danger">View::xtechohtml(<span class="text-muted font-weight-normal"> $nameholder </span>)</strong></p>
+        <p>Nội dung HTML xuất ra từ việc phát sinh các event và nạp giá trị từ các block theo thứ tự</p>
+        <p>
+            Nội dung từ event: <code><strong>start-ahdesign-render-</strong>$nameholder</code>
+        </p>
+        <p class="pl-5">Đăng ký <code>Common::register_event($eventname, $class='BlockHtml', $renderblock = null)</code> với <code>$class</code> là lớp sẽ thi hành khi có sự kiện, nó kế thừa từ <code>\Ichte\Core\Event\AbstractListener</code> với phương thức <code>exectute()</code> trả về HTML mong muốn. Trong Controller đăng ký nhanh bằng: <code>XtController::setEventView($event='start-ahdesign-render-header-layout', $class='ClassListener', $renderblock=null)</code></p>
+
+        <p>
+            Nội dung từ render block partial: <code>$view->$nameholder<strong>_partial_head</strong></code> cách đăng ký xem phần dưới
+        </p>
+        <p>Nội dung trục tiếp từ: <code>$view->$nameholder</code></p>
+        <p>
+            Nội dung từ render block partial: <code>$view->$nameholder<strong>_partial_foot</strong></code>
+        </p>
+        <p>
+            Nội dung từ event: <code><strong>end-ahdesign-render-</strong>$nameholder</code>
+        </p>
+        <p>
+            Đưa kết quả vào một Template Block: <code>$view->$nameholder<strong>_block</strong></code>
+        </p>
+        <p>Để đăng ký sự kiện <code>start-ahdesign-render-$nameholder</code> <code>end-ahdesign-render-$nameholder</code> thì cần đăng ký event.
+        </p>
+        <p>Ngoài ra tại View có thể gọi một event: <code>sendevent($eventname, $params = [])</code></p>
+    </li>
+    <li class="list-group-item">
+        <p><strong class="text-danger">XtController::setBlockView(<span class="font-weight-normal text-muted">$option, $placeholder = BlockView::CONTENT, $view = null</span>)</strong></p>
+        <p>Phương thức thiết lập giá trị  sử dụng để <code>xtechohtml</code> dựng HTML từ Template Block, render block partial ...</p>
+        <p><strong>Trường hợp 1 - gán thêm giá trị HTML vào $nameholder</strong></p>
+        <pre>setBlockView(['v' => $value],$nameholder);</pre>
+        <p><strong>Trường hợp 2 - gán viewmodel thêm vào $nameholder</strong></p>
+        <pre>setBlockView(array['view' => $viewmodel], 'placeholder')</pre>
+        <p><strong>Trường hợp 3 - thiết lập template Block cho $nameholder</strong></p>
+        <pre>setBlockView(array['block' => 'path/toblock'], 'placeholder')</pre>
+        <p><strong>Trường hợp 4 - thêm một partial vào header/footer</strong></p>
+<pre>$this->BlockView(
+[
+    BlockView::key_head|footer =>
+        [
+            BlockView::key_partial => 'path .phtml',
+            BlockView::key_value =>   'value transport to partial'
+        ]
+],
+$placeholder, $view = null);
+</pre>
+
+    </li>
+
+    <li class="list-group-item">
+        <p><strong class="text-danger">Ichte\File\Filter\RenameUpload</strong> chèn một file ảnh vào photo</p>
+<pre>
+$option = [
+    'target' => 'photo', //Thư mục
+    'use_upload_name' => true, //Sử dụng tên file gốc
+    'use_upload_extension' => true,//Sử dụng tên file gốc
+    'overwrite' => true,
+    'dbAdapter' => $this->dbAdapter,
+    'user' => $this->identity(),
+    'extractcolor' => true,
+    'createthumb' => true,
+    'widththumb' => 350,
+     'checkhash' => false, //Check Hash for replate
+    'movefileupload'=> false, //thiết lập move file từ local không phải qua upload
+    'valuesInsertDb' => [ //Dữ liệu chèn thêm vào DB
+        'photostyle' => \Common::photo_product,
+        'product' => $idproduct,
+        'active' => true,
+        'space' => 0
+    ]
+];
+
+$dataupload = RenameUpload::virtualUpload($pathfile);
+
+\Zend\Filter\StaticFilter::execute($dataupload,RenameUpload::class, $option);
+
+</pre>
+
+    </li>
+
+</ul>

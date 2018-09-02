@@ -1,0 +1,12 @@
+<?
+/**
+ * @var $this PhpRenderer
+ * @var $uploader \Ichte\File\Tools\Uploader
+ */
+?>
+<div class="p-4">
+    <p>Chọn file logo để upload, sau khi upload thành công nhấn F5 để thay đổi!</p>
+    <?=$uploader->render()?>
+    <p><img src="<?=$this->url('home').'public/img/logo.png'?>" style="max-width: 100%"></p>
+</div>
+
