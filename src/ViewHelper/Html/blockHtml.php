@@ -25,6 +25,7 @@ namespace XT\Core\ViewHelper\Html;
  */
 
 use XT\Core\Common\Common;
+use XT\Core\Event\EventManager\EventManager;
 use XT\Core\System\KeyView;
 use Zend\View\Helper\AbstractHelper;
  
@@ -36,7 +37,7 @@ class blockHtml extends AbstractHelper
     protected $request;
 
     /**
-     * @var \Zend\EventManager\EventManager
+     * @var EventManager
      */
     protected $eventmanager;
 
@@ -96,20 +97,10 @@ class blockHtml extends AbstractHelper
         
         $block = $nameholder.'_'.KeyView::key_block;
 
-
-
-//        if (isset(Common::$cf->common->noloadtemplateholder))
-//        {
-//            Common::$cf->common->noloadtemplateholder;
-//        }
-
-
-        
         if (isset($view->$block)) {
             if (Common::keyholder_notemplate_exist($nameholder))
             {
-                //Khong nap template hoac nap template khac
-                //$html = '<div class="layout-content">'..'</div>';
+                //No load Template
 
             }
             else
@@ -143,12 +134,13 @@ class blockHtml extends AbstractHelper
      */
     function trigger($prefix, &$html, &$nameholder, &$pageinfo)
     {
-        $evname = $prefix.$nameholder;
+        $eventName = $prefix.$nameholder;
 
         if (DEBUG_ON)
-            $html.= '<span class="badge badge-danger m-3">'.$evname.'</span>';
+            $html.= '<span class="badge badge-danger m-3" >'.$eventName.'</span>';
 
-        $rt_event = $this->eventmanager->trigger($evname, $this, $pageinfo);
+         
+        $rt_event = $this->eventmanager->trigger($eventName, $this, $pageinfo);
 
         foreach ($rt_event as $ob)
             $html .= $ob;

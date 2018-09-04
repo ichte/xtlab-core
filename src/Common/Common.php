@@ -1,7 +1,10 @@
 <?php
 namespace XT\Core\Common;
 
+use XT\Core\Event\BlockHtml;
 use XT\Core\System\Bags;
+use Zend\EventManager\EventManager;
+use Zend\EventManager\LazyListener;
 use Zend\View\HelperPluginManager;
 use Zend\View\Resolver\AggregateResolver;
 use Zend\View\Resolver\TemplateMapResolver;
@@ -84,5 +87,52 @@ class Common
          $logger->debug($log.'|'.self::getUrlCanonical());
     }
 
-    
+
+
+    /**
+     * Register Event for xtecho
+     * @param string $eventname
+     * @param string $class | is Listener -> class call for render : ProductCategory\, BlockHtml
+     * @param null $renderblock | name block use in BlockHtml
+     */
+    public static function register_event($eventname, $class= BlockHtml::class, $renderblock = null)
+    {
+        $serviceManager = self::$sm;
+        $eventManager   = self::$em;
+
+
+        if ($renderblock)
+            $class = BlockHtml::class;
+
+        $listener_key = $class.($renderblock?'-renderblock:'.$renderblock:'');
+
+
+
+        //Create Listerner render Error for Event if Listener Class not exist
+        if (!class_exists($class))
+        {
+            $renderEventNotExist = function ($e) use ($class, $eventname) {
+                return "<span class='badge badge-danger m-3'>Listener <b>$class</b> for event <i>$eventname</i> not exists!</span>";
+            };
+            $eventManager->attach($eventname,$renderEventNotExist );
+            return;
+        }
+
+
+        if (!$serviceManager->has($listener_key))
+            $serviceManager->setFactory($listener_key, $class);
+
+        $ars = ($renderblock) ? ['blockhtml' => $renderblock] : [];
+
+       
+
+        $eventManager->attach($eventname, new LazyListener(
+            [
+             'listener' => $listener_key,
+             'method'   => 'execute',
+            ],
+            $serviceManager, $ars));
+    }
+
+
 }

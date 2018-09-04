@@ -6,7 +6,7 @@ namespace XT\Core\Admin\Common;
 use XT\Admin\Controller\AbstractPlugin;
 use XT\Core\Common\Common;
 use XT\Core\ToolBox\MessageBox;
-use XT\Core\System\RBAC_CONST;
+use XT\Core\System\RBAC_PERMISSION;
 use Zend\Db\Sql\Select;
 use Zend\Filter\FilterChain;
 use Zend\Filter\StringToLower;
@@ -26,8 +26,8 @@ class BasicCommand extends AbstractPlugin
 
     function index($i)
     {
-        if (!$this->ctrl->isGranted(RBAC_CONST::BASIC_SETTING))
-            return MessageBox::viewNoPermission($this->ctrl->getEvent(), RBAC_CONST::BASIC_SETTING);
+        if (!$this->ctrl->isGranted(RBAC_PERMISSION::BASIC_SETTING))
+            return MessageBox::viewNoPermission($this->ctrl->getEvent(), RBAC_PERMISSION::BASIC_SETTING);
 
 
         $view = $this->createView(__DIR__, __CLASS__, __FUNCTION__);

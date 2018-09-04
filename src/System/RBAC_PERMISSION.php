@@ -2,7 +2,7 @@
 namespace XT\Core\System;
 
 
-class RBAC_CONST
+class RBAC_PERMISSION
 {
     const ADMIN_INDEX = 'admin.index.page';
     const BASIC_SETTING = 'admin_basic_setting';

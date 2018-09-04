@@ -2,6 +2,7 @@
 /**
  * @var $this PhpRenderer
  */
+use XT\Core\Common\Common;
 ?>
 <div class="p-4 w-100">
     <?=$this->dropdownMenu()->setName('InsertHTML')->render([
@@ -58,7 +59,7 @@
 
         };
 
-        $controls= \Common::$sm->get('config')['controllers'];
+        $controls = Common::$sm->get('config')['controllers'];
         $controller = [];
         foreach ($controls as $key => $cc) {
             if (!isset($controller[$key]))

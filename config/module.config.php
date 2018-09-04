@@ -25,9 +25,9 @@ return [
 
     'service_manager'=>[
         'factories'=>[
-            \XT\Core\System\Placeholder\PlaceholderManager::class            => \XT\Core\System\Placeholder\PlaceholderManager::class
-
-            //'navigation'                                                    => 'Zend\Navigation\Service\DefaultNavigationFactory',
+            \XT\Core\System\Placeholder\PlaceholderManager::class            => \XT\Core\System\Placeholder\PlaceholderManager::class,
+            \XT\Core\Event\InsertHtml\InsertHtmlManager::class               => \XT\Core\Event\InsertHtml\InsertHtmlManager::class,
+            'navigation'                                                     => 'Zend\Navigation\Service\DefaultNavigationFactory',
 
         ],
         'abstract_factories' => [
@@ -41,5 +41,6 @@ return [
     'view_helpers'       =>  include 'viewhelper.config.php',
     'view_manager'       =>  include 'viewmanager.config.php',
     'controller_plugins' =>  include 'controller_plugins.config.php',
-    'log'                =>  include 'log.config.php'
+    'log'                =>  include 'log.config.php',
+    'caches'             =>  include 'cache.config.php'
 ];

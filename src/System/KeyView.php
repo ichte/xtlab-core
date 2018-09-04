@@ -8,7 +8,6 @@
 
 namespace XT\Core\System;
 
-
 class KeyView
 {
     const HEADER                = 'header_layout';
@@ -25,6 +24,6 @@ class KeyView
     const key_block             = 'block';
     const key_partial           = 'partial';
     const key_value             = 'value';
-    const prefix_html_start     = 'start_block_html_';
-    const prefix_html_end       = 'end_block_html_';
+    const prefix_html_start     = 'start_block_';
+    const prefix_html_end       = 'end_html_';
 }

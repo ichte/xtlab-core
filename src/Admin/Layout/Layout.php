@@ -6,10 +6,11 @@ namespace XT\Core\Admin\Layout;
 
 use XT\Admin\Controller\AbstractPlugin;
 use XT\Core\Common\Common;
+use XT\Core\Event\InsertHtml\InsertHtmlManager;
 use XT\Core\System\Placeholder\Placeholder;
 use XT\Core\System\Placeholder\PlaceholderManager;
 use XT\Core\ToolBox\MessageBox;
-use XT\Core\System\RBAC_CONST;
+use XT\Core\System\RBAC_PERMISSION;
 use Zend\Filter\FilterChain;
 use Zend\Filter\StringToLower;
 use Zend\Filter\StringTrim;
@@ -21,7 +22,6 @@ use Zend\View\Model\ViewModel;
 class Layout extends AbstractPlugin
 {
 
-    const RBAC_LAYOUT_EDIT = 'layout.edit';
     /**
      * @var ValidatorChain
      */
@@ -35,8 +35,8 @@ class Layout extends AbstractPlugin
 
     function index($id)
     {
-        if (!$this->ctrl->isGranted(Layout::RBAC_LAYOUT_EDIT))
-            return MessageBox::viewNoPermission($this->ctrl->getEvent(), 'Không cấp quyền :'. Layout::RBAC_LAYOUT_EDIT);
+        if (!$this->ctrl->isGranted(RBAC_PERMISSION::LAYOUT_EDIT))
+            return MessageBox::viewNoPermission($this->ctrl->getEvent(), Common::translate('Not permission granted'). ' : '. RBAC_PERMISSION::LAYOUT_EDIT);
 
         $view = $this->createView(__DIR__, __CLASS__, __FUNCTION__);
 
@@ -66,8 +66,8 @@ class Layout extends AbstractPlugin
         ];
 
         $ar['eventinserthtml'] = [
-            'name' => 'Chèn File HTML',
-            'description' => 'Chèn nội dung .phtml vào view bằng cách móc nối sự kiện theo holder'
+            'name' => 'Inset PHTML',
+            'description' => 'Insert file.html to placeholder by trigger event'
 
         ];
 
@@ -598,10 +598,159 @@ class Layout extends AbstractPlugin
     }
 
 
-    function eventinserthtml($i)
+    function editslide($id)
     {
         if (!$this->ctrl->isGranted(Layout::RBAC_LAYOUT_EDIT))
             return MessageBox::viewNoPermission($this->ctrl->getEvent(), 'Không cấp quyền '.Layout::RBAC_LAYOUT_EDIT);
+
+        $vars = \Ichte\Core\Uicoms\Slide\SlideEdit::editslideAction($this->ctrl);
+
+
+        if (($vars instanceof ViewModel) || ($vars instanceof \Zend\Http\PhpEnvironment\Response))
+            return $vars;
+
+        $view = $this->createView(__DIR__, __CLASS__, __FUNCTION__);
+
+        $view->setVariables($vars);
+        return $view;
+    }
+
+    function pluginview() {
+        return $this->ctrl->redirect()->toUrl($this->url('pluginview'));
+    }
+
+    function listenerglobal() {
+        return $this->ctrl->redirect()->toUrl($this->url('pluginview', 'listenerglobal'));
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    function holderdelete($id)
+    {
+        if ($this->ctrl->isConfirm(['id' => $id, 'confirmdel' => 'confirmdel']))
+        {
+            /**
+             * @var $holderManager HolderManager
+             */
+            $holderManager = $this->serviceManager->get(PlaceholderManager::class);
+            $holderManager->delete($id);
+
+
+            return MessageBox::redirectMgs('Đã xóa', 
+                $this->ctrl->url()->fromRoute('admin', ['plugin' => 'layout', 'act' => 'placeholder']),
+                'Thông báo',
+                2
+
+            );
+        }
+        return MessageBox::redirectMgs('Cancel Delete', 
+            $this->ctrl->url()->fromRoute('admin', ['plugin' => 'layout', 'act' => 'placeholder', 'id' =>$id]),
+            'Notification',
+            2
+
+        );
+    }
+
+    function placeholder($id)
+    {
+
+        if (!$this->ctrl->isGranted(RBAC_PERMISSION::LAYOUT_EDIT))
+            return MessageBox::viewNoPermission($this->ctrl->getEvent(), Common::translate('Not permission granted').' : '. RBAC_PERMISSION::LAYOUT_EDIT);
+
+        /**
+         * @var $placeholderManager PlaceholderManager
+         */
+        $placeholderManager = $this->serviceManager->get(PlaceholderManager::class);
+
+
+
+        $id = $this->ctrl->params()->fromRoute('id');
+        $obs = $placeholderManager->allHolder();
+        $item = null;
+
+        $listevent = [];
+        foreach ($obs as $ob) { $listevent[] = $ob; }
+
+        $request = $this->ctrl->getRequest();
+
+        if ($id > 0)
+        {
+            $item = $placeholderManager->find($id);
+            if ($item == null)
+            {
+                return MessageBox::htmlMessage(Common::translate('Not found').' : '.$id);
+            }
+
+            if ($request->isPost())
+            {
+                $post = $request->getPost();
+
+
+                if ($post->action == 'Delete') {
+                    return $this->ctrl->askBeforeDone(
+                        'Xóa keyholder: '.$item->getName(),
+                        $this->ctrl->url()->fromRoute('admin', ['plugin' => 'layout', 'act' => 'holderdelete', 'id' =>$id]),
+                        ['id' => $id, 'confirmdel' => 'confirmdel']
+
+                    );
+                }
+                $item = [
+                    'name' => $post->name,
+                    'description' => $post->description
+                ];
+
+                $placeholderManager->update($item, $id);
+
+                return $this->ctrl->redirect()->toRoute('admin', ['plugin' => 'layout', 'act' => 'placeholder', 'id' =>$id]);
+
+            }
+
+
+            $view = $this->createView(__DIR__, __CLASS__, 'holderedit');
+            $view->setVariables(['item' => $item]);
+            return $view;
+
+        }
+
+
+
+        $view = $this->createView(__DIR__, __CLASS__, __FUNCTION__);
+        $view->setVariables(['listevent'=>$listevent,'item' => $item]);
+        return $view;
+    }
+
+    function newholder()
+    {
+        if (!$this->ctrl->isGranted(RBAC_PERMISSION::LAYOUT_EDIT))
+            return MessageBox::viewNoPermission($this->ctrl->getEvent(), Common::translate('Not permission granted').' : '. RBAC_PERMISSION::LAYOUT_EDIT);
+        /**
+         * @var $holderManager PlaceholderManager
+         */
+        $holderManager = $this->serviceManager->get(PlaceholderManager::class);
+
+        $id = $holderManager->createnewholder();
+        return $this->ctrl->redirect()->toRoute('admin', ['plugin' => 'layout', 'act' => 'placeholder', 'id' =>$id]);
+    }
+
+
+    function eventinserthtml($i)
+    {
+        if (!$this->ctrl->isGranted(RBAC_PERMISSION::LAYOUT_EDIT))
+            return MessageBox::viewNoPermission($this->ctrl->getEvent(), Common::translate('Not permission granted').' ' .RBAC_PERMISSION::LAYOUT_EDIT);
 
         /**
          * @var $inserthtmlmanager InsertHtmlManager
@@ -617,7 +766,7 @@ class Layout extends AbstractPlugin
 
         if ($this->ctrl->getRequest()->isPost())
         {
-           $inserthtmlmanager->exportconfig();
+            $inserthtmlmanager->exportconfig();
         }
 
 
@@ -628,8 +777,8 @@ class Layout extends AbstractPlugin
 
     function eventinserthtmledit($id)
     {
-        if (!$this->ctrl->isGranted(Layout::RBAC_LAYOUT_EDIT))
-            return MessageBox::viewNoPermission($this->ctrl->getEvent(), 'Không cấp quyền '.Layout::RBAC_LAYOUT_EDIT);
+        if (!$this->ctrl->isGranted(RBAC_PERMISSION::LAYOUT_EDIT))
+            return MessageBox::viewNoPermission($this->ctrl->getEvent(), Common::translate('Not permission granted').' ' .RBAC_PERMISSION::LAYOUT_EDIT);
 
         /**
          * @var $inserthtmlmanager InsertHtmlManager
@@ -809,154 +958,6 @@ class Layout extends AbstractPlugin
         $view->setVariables($valrt);
         return $view;
 
-    }
-
-    function editslide($id)
-    {
-        if (!$this->ctrl->isGranted(Layout::RBAC_LAYOUT_EDIT))
-            return MessageBox::viewNoPermission($this->ctrl->getEvent(), 'Không cấp quyền '.Layout::RBAC_LAYOUT_EDIT);
-
-        $vars = \Ichte\Core\Uicoms\Slide\SlideEdit::editslideAction($this->ctrl);
-
-
-        if (($vars instanceof ViewModel) || ($vars instanceof \Zend\Http\PhpEnvironment\Response))
-            return $vars;
-
-        $view = $this->createView(__DIR__, __CLASS__, __FUNCTION__);
-
-        $view->setVariables($vars);
-        return $view;
-    }
-
-    function pluginview() {
-        return $this->ctrl->redirect()->toUrl($this->url('pluginview'));
-    }
-
-    function listenerglobal() {
-        return $this->ctrl->redirect()->toUrl($this->url('pluginview', 'listenerglobal'));
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    function holderdelete($id)
-    {
-        if ($this->ctrl->isConfirm(['id' => $id, 'confirmdel' => 'confirmdel']))
-        {
-            /**
-             * @var $holderManager HolderManager
-             */
-            $holderManager = $this->serviceManager->get(PlaceholderManager::class);
-            $holderManager->delete($id);
-
-
-            return MessageBox::redirectMgs('Đã xóa', 
-                $this->ctrl->url()->fromRoute('admin', ['plugin' => 'layout', 'act' => 'placeholder']),
-                'Thông báo',
-                2
-
-            );
-        }
-        return MessageBox::redirectMgs('Cancel Delete', 
-            $this->ctrl->url()->fromRoute('admin', ['plugin' => 'layout', 'act' => 'placeholder', 'id' =>$id]),
-            'Notification',
-            2
-
-        );
-    }
-
-    function placeholder($id)
-    {
-
-        if (!$this->ctrl->isGranted(RBAC_CONST::LAYOUT_EDIT))
-            return MessageBox::viewNoPermission($this->ctrl->getEvent(), Common::translate('Not permission granted').' : '. RBAC_CONST::LAYOUT_EDIT);
-
-        /**
-         * @var $placeholderManager PlaceholderManager
-         */
-        $placeholderManager = $this->serviceManager->get(PlaceholderManager::class);
-
-
-
-        $id = $this->ctrl->params()->fromRoute('id');
-        $obs = $placeholderManager->allHolder();
-        $item = null;
-
-        $listevent = [];
-        foreach ($obs as $ob) { $listevent[] = $ob; }
-
-        $request = $this->ctrl->getRequest();
-
-        if ($id > 0)
-        {
-            $item = $placeholderManager->find($id);
-            if ($item == null)
-            {
-                return MessageBox::htmlMessage(Common::translate('Not found').' : '.$id);
-            }
-
-            if ($request->isPost())
-            {
-                $post = $request->getPost();
-
-
-                if ($post->action == 'Delete') {
-                    return $this->ctrl->askBeforeDone(
-                        'Xóa keyholder: '.$item->getName(),
-                        $this->ctrl->url()->fromRoute('admin', ['plugin' => 'layout', 'act' => 'holderdelete', 'id' =>$id]),
-                        ['id' => $id, 'confirmdel' => 'confirmdel']
-
-                    );
-                }
-                $item = [
-                    'name' => $post->name,
-                    'description' => $post->description
-                ];
-
-                $placeholderManager->update($item, $id);
-
-                return $this->ctrl->redirect()->toRoute('admin', ['plugin' => 'layout', 'act' => 'placeholder', 'id' =>$id]);
-
-            }
-
-
-            $view = $this->createView(__DIR__, __CLASS__, 'holderedit');
-            $view->setVariables(['item' => $item]);
-            return $view;
-
-        }
-
-
-
-        $view = $this->createView(__DIR__, __CLASS__, __FUNCTION__);
-        $view->setVariables(['listevent'=>$listevent,'item' => $item]);
-        return $view;
-    }
-
-    function newholder()
-    {
-        if (!$this->ctrl->isGranted(RBAC_CONST::LAYOUT_EDIT))
-            return MessageBox::viewNoPermission($this->ctrl->getEvent(), Common::translate('Not permission granted').' : '. RBAC_CONST::LAYOUT_EDIT);
-        /**
-         * @var $holderManager PlaceholderManager
-         */
-        $holderManager = $this->serviceManager->get(PlaceholderManager::class);
-
-        $id = $holderManager->createnewholder();
-        return $this->ctrl->redirect()->toRoute('admin', ['plugin' => 'layout', 'act' => 'placeholder', 'id' =>$id]);
     }
 
 
