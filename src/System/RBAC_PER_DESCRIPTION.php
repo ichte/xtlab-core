@@ -8,7 +8,8 @@ class RBAC_PER_DESCRIPTION
         RBAC_PERMISSION::ADMIN_INDEX => 'Admin Page',
         RBAC_PERMISSION::BASIC_SETTING => 'Basic Setting Page',
         RBAC_PERMISSION::DB_ALTER => 'Alter tables data (database)',
-        RBAC_PERMISSION::LAYOUT_EDIT => ''
+        RBAC_PERMISSION::LAYOUT_EDIT => '',
+        RBAC_PERMISSION::OPTIONS_INDEX => 'Access options page'
     ];
 
     public static $rolepermission = [
@@ -19,7 +20,8 @@ class RBAC_PER_DESCRIPTION
 
 
         RBAC_ROLE::Moderator => [
-            RBAC_PERMISSION::LAYOUT_EDIT
+            RBAC_PERMISSION::LAYOUT_EDIT,
+            RBAC_PERMISSION::OPTIONS_INDEX,
         ] ,
 
 

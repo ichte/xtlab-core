@@ -41,7 +41,7 @@ class BlockHtml extends AbstractListener
     /**
      * @param string $blockhtml
      */
-    public function setBlockhtml(string $blockhtml)
+    public function setBlockhtml($blockhtml)
     {
         $this->blockhtml = $blockhtml;
     }

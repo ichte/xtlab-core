@@ -1,6 +1,8 @@
 <?php
 namespace XT\Core;
 
+use XT\Option\Service\Factory\OptionAccess;
+use XT\Option\Service\OptionManager;
 use Zend\Debug\Debug;
 use Zend\EventManager\EventManager;
 use Zend\Mvc\MvcEvent;
@@ -27,7 +29,7 @@ class Module
         Common::$sm             = $e->getApplication()->getServiceManager();
         Common::$app            = $e->getApplication();
         Common::$em             = $e->getApplication()->getEventManager();
-
+        Common::$cf             = Common::$sm ->get(OptionAccess::class);
 
         //INIT / START SESSION
         $coresession = Common::$sm->get('config')['coresession'];
@@ -36,15 +38,18 @@ class Module
         $sessionManager = new SessionManager($sessionConfig);
         Container::setDefaultManager($sessionManager);
         $sessionManager->start();
- 
+
 
         //LISTENER DISPATCH
-        Common::$em->attach("dispatch", 'XT\Core\Module::onDispatchController', -100);
+        Common::$em->attach("dispatch", function(MvcEvent $e) { Module::onDispatchController($e); }, -100); //-100
+
+
     }
 
     public static function onDispatchController(MvcEvent $e) {
 
         $target = $e->getTarget();
+
 
         //SET BLOCK HTML BY EVENT
         $routeMatch      = $e->getRouteMatch();
@@ -113,19 +118,34 @@ class Module
             });
 
 
- 
+        //SET BLOCK HTML LAYOUT
+        $regter_listener(
+            'ALL',
+            'ALL',
+            $config_merge['insert_layout'],
+            function($k,&$v) use($e) {
+
+                $e->getTarget()->setBlockView(['block' => $v],$k);
+            });
 
 
-//
-//
-//        //SET BLOCK HTML LAYOUT
-//        $regter_listener($controller_name, $action_name, $config_merge['insert_layout'],
-//            function($k,&$v) use($e) {$e->getTarget()->setBlockView(['block' => $v],$k);});
-//        $regter_listener($controller_name, '*', $config_merge['insert_layout'], function($k,&$v) use($e) {$e->getTarget()->setBlockView(['block' => $v],$k);});
+        $regter_listener(
+            $controller_name,
+            $action_name,
+            $config_merge['insert_layout'],
+            function($k,&$v) use($e) {
+                $e->getTarget()->setBlockView(['block' => $v],$k);
+            });
+
+        $regter_listener($controller_name, '*',
+            $config_merge['insert_layout'],
+            function($k,&$v) use($e) {$e->getTarget()->setBlockView(['block' => $v],$k);});
+
 //        if ($action_name == 'not-found') {
 //            $regter_listener('ALL', 'notfound', $config_merge['insert_layout'], function($k,&$v) use($e) {$e->getTarget()->setBlockView(['block' => $v],$k);});
 //        }
 //
+
 //
 //
 //

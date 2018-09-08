@@ -9,15 +9,13 @@
 
 
 <div class="p-2 m-2">
-    <?
-    echo $this->pageBreadcrumbs()->setItems(
+    <?=$this->partial('dropdown_breadcrumbs',
         [
-            'Administrator'=> $this->url('admin'),
-            'Basic Setting' => $this->url('admin', ['plugin'=>'basiccommand']),
-            'Logs' => $this->url('admin', ['plugin'=>'basiccommand']),
-        ]
-    )->render();
-    ?>
+            'listplugins' => $listplugins,
+            'currentNameplugin' => $currentNameplugin,
+            'listactions' => $listactions,
+            'currentNameaction' => $currentNameaction
+        ])?>
 
     <?=count($logs)?>
     <table class="table table-bordered">

@@ -57,6 +57,8 @@ class InsertHtmlManager
 
     public function insertnew($data)
     {
+        if (isset($data['id']))
+            unset($data['id']);
         $id = $this->tableEventHtml->insert($data);
         $this->exportconfig();
         return $this->tableEventHtml->getLastInsertValue();

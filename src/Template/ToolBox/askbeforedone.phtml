@@ -2,6 +2,10 @@
 /**
  * @var $this PhpRenderer
  */
+
+$csrfaskbeforedone = new \Zend\Form\Element\Csrf('csrfaskbeforedone',['csrf_options'=>['timeout'=>'20']] );
+
+
 ?>
 <div class="w-100 p-2">
 <div class="card w-100">
@@ -13,7 +17,11 @@
         <?foreach ($elementform as $key=>$val):?>
             <input value="<?=$val?>" name="<?=$key?>" hidden="true" />
         <?endforeach?>
+
        </div>
+
+       <?=$this->formhidden($csrfaskbeforedone)?>
+
 
        <button class="btn btn-danger" value="OK" type="submit" name="buttonask"><?=$this->translate('Ok')?></button>
        <button class="btn btn-secondary" value="CANCEL" type="submit" name="buttoncancel" onclick="removeparam();"><?=$this->translate('Cancel')?></button>

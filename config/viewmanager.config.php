@@ -7,9 +7,12 @@ return [
     'exception_template'       => 'error/index',
 
     'template_map' => [
-        'layout/layout'           => __DIR__ . '/../src/template/layout/layout.phtml',
-        'error/404'               => __DIR__ . '/../src/template/layout/error/404.phtml',
-        'error/index'             => __DIR__ . '/../src/template/layout/error/index.phtml',
+        'layout/layout'                 => __DIR__ . '/../src/template/layout/layout.phtml',
+        'error/404'                     => __DIR__ . '/../src/template/layout/error/404.phtml',
+        'error/index'                   => __DIR__ . '/../src/template/layout/error/index.phtml',
+
+        'textarea_autogrow'             => __DIR__ . '/../src/template/form/element/textarea-autogrow.phtml',
+        'text-autocomplete'             => __DIR__ . '/../src/template/form/element/text-autocomplete.phtml',
     ],
 
     'template_path_stack' => [

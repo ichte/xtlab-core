@@ -2,25 +2,17 @@
 /**
  * @var $this PhpRenderer
  */
+
 ?>
 <div class="p-4 w-100">
-    <?=$this->dropdownMenu()->setName('Holder')->render([
-        'Layout Edit' => $this->url('admin', ['plugin' => 'layout', 'act' =>'layoutedit']),
-        'Holder' => $this->url('admin', ['plugin' => 'layout', 'act' =>'holder']),
-        'BlockLayout' => $this->url('admin', ['plugin' => 'layout', 'act' =>'applyblocklayout']),
-        'InsertHTML' => $this->url('admin', ['plugin' => 'layout', 'act' =>'eventinserthtml']),
-        'Home Slider' => $this->url('admin', ['plugin' => 'layout', 'act' =>'editslide']),
-        'PluginView' => $this->url('admin', ['plugin' => 'pluginview']),
-        'ListenerGlobal' => $this->url('admin', ['plugin' => 'pluginview', 'act' => 'listenerglobal']),
+    <?=$this->partial('dropdown_breadcrumbs',
+        [
+            'listplugins' => $listplugins,
+            'currentNameplugin' => $currentNameplugin,
+            'listactions' => $listactions,
+            'currentNameaction' => $currentNameaction
+        ])?>
 
-    ])?>
-    <?
-    echo $this->pageBreadcrumbs()->setItems([
-        'Administrator' => $this->url('admin'),
-        'Layout' => $this->url('admin', ['plugin' => 'layout']),
-        'Holder' => $this->url('admin', ['plugin' => 'layout', 'act'=>'holder']),
-    ])->render();
-    ?>
 
 <h3>Placeholders - <?=$this->translate('place send event while render HTML')?></h3>
 <div class="list-group w-100">

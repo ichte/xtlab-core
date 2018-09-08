@@ -11,6 +11,8 @@ class InsertHTML
     protected $id;
     protected $active;
 
+
+
     public function exchangeArray($data)
     {
         if (isset($data['Controller'])) $this->Controller = $data['Controller'];
@@ -19,10 +21,20 @@ class InsertHTML
         if (isset($data['Block'])) $this->Block = $data['Block'];
         if (isset($data['id'])) $this->id = $data['id'];
         if (isset($data['active'])) $this->active = $data['active'];
+
+        if (isset($data['ControllerAction'])) {
+            $ar = explode('-',$data['ControllerAction']);
+            $this->setController($ar[0]);
+            $this->setAction($ar[1]);
+
+        }
+
     }
     public function getArrayCopy()
     {
-        return get_object_vars($this);
+        $ar = get_object_vars($this);
+        $ar['ControllerAction'] = $this->Controller.'-'.$this->getAction();
+        return $ar;
     }
 
     /**

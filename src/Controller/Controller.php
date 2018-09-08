@@ -17,6 +17,7 @@ use Zend\ServiceManager\ServiceManager;
  * @method isGranted isGranted($permission, $assert = null, $optionassert = [], $user = null)
  * @method askBeforeDone    askBeforeDone($title, $urlpost, $elementform = [])
  * @method isConfirm        isConfirm($fiels)
+ * @method \Zend\Http\PhpEnvironment\Request  getRequest()
  */
 abstract class Controller extends AbstractActionController
 {

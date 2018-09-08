@@ -2,6 +2,7 @@
 
 namespace XT\Core\System\Placeholder;
   
+ use XT\Core\System\KeyView;
  use Zend\Db\Adapter\Adapter;
  use Zend\Db\Sql\Select;
  use Zend\Db\TableGateway\TableGateway;
@@ -33,6 +34,29 @@ namespace XT\Core\System\Placeholder;
              $select->order(['name' => 'ASC']);
          })->toArray();
      }
+
+     public function allEvent()
+     {
+         $events = [];
+         /***
+          * @var $holder Placeholder
+          */
+         foreach ($this->allHolder() as $holder) {
+
+             $options = [];
+             $event_start = KeyView::prefix_html_start.$holder['name'];
+             $event_end = KeyView::prefix_html_end.$holder['name'];
+             $options[$event_start] = $event_start;
+             $options[$event_end] = $event_end;
+
+             $events[] = [
+                'label' => $holder['name'],
+                'options' => $options
+             ];
+         }
+         return $events;
+     }
+
 
      /***
       * @param $id

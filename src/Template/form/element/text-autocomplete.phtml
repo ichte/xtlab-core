@@ -1,0 +1,32 @@
+<?
+/***
+ * @var $this PhpRenderer
+ *
+ */
+
+XT\Core\Common\Common::addJsFiles($this->basePath('public/js/jquery.autocomplete.min.js'));
+XT\Core\Common\Common::addCssFiles($this->basePath('public/css/autocomplete.css'));
+
+//Use https://github.com/devbridge/jQuery-Autocomplete
+
+
+
+
+$valueAutocomplete = $element->getOption('valueAutocomplete');
+$nameelement = $element->getName();
+echo sprintf(
+    '<input %s value="%s"/>',
+    "name=\"{$element->getName()}\" ".$attributes,
+     $content
+);
+$ars = [];
+foreach ($valueAutocomplete as $value)
+{
+    $ars[]= ['value'=> $value];
+}
+$json = json_encode($ars);
+?>
+<script>
+    var autocompleteData<?=$nameelement?> = <?=$json?>;
+    $('input[name="<?=$nameelement?>"]').devbridgeAutocomplete({ lookup: autocompleteData<?=$nameelement?>, minChars:0});
+</script>

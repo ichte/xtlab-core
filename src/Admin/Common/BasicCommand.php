@@ -33,11 +33,19 @@ class BasicCommand extends AbstractPlugin
         $view = $this->createView(__DIR__, __CLASS__, __FUNCTION__);
 
 
+
+
+        $view->setVariables(['list' => $this->getListaction()]);
+        return $view;
+    }
+
+    public function intPlugin()
+    {
         $ar = [];
         $ar['clearcache'] = [
-                'name' => 'Xóa cache hệ thống',
-                'description' => 'Xóa cache để hệ thống render lại theo dữ liệu mới nhất'
-            ];
+            'name' => 'Xóa cache hệ thống',
+            'description' => 'Xóa cache để hệ thống render lại theo dữ liệu mới nhất'
+        ];
         $ar['siteinfo'] = [
             'name' => 'Thông tin tham số website',
             'description' => 'Các tham số nhân của website'
@@ -79,10 +87,8 @@ class BasicCommand extends AbstractPlugin
             'description' => 'Thông tin Code'
         ];
 
-        $view->setVariables(['list' => $ar]);
-        return $view;
+        $this->setListaction($ar);
     }
-
 
 
 

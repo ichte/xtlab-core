@@ -1,0 +1,16 @@
+<?
+$minheight = $element->getOption('minheight');
+if (!$minheight) $minheight = 50;
+
+echo sprintf(
+    '<textarea %s>%s</textarea>',
+    "name=\"{$element->getName()}\" ".$attributes,
+    $content
+);
+
+?>
+
+<script>
+    $('textarea[name=<?=$element->getName()?>]').autogrow();
+    $('textarea[name=<?=$element->getName()?>]').height(<?=$minheight?>);
+</script>

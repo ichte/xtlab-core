@@ -2,27 +2,17 @@
 /**
  * @var $this PhpRenderer
  */
+
+
 ?>
 <div class="w-100 m-4">
-    <?=$this->dropdownMenu()->setName('Layout')->render([
-        'Basic' => $this->url('admin', ['plugin' => 'basiccommand']),
-        'Layout' => $this->url('admin', ['plugin' => 'layout']),
-        'Trang riêng' => $this->url('admin', ['plugin' => 'literalpage']),
-        'Database' => $this->url('admin', ['plugin' => 'database']),
-        'PluginView' => $this->url('admin', ['plugin' => 'pluginview']),
-        'ListenerGlobal' => $this->url('admin', ['plugin' => 'pluginview', 'act' => 'listenerglobal']
-        ),
-
-    ])?>
-    <?
-    echo $this->pageBreadcrumbs()->setItems(
+    <?=$this->partial('dropdown_breadcrumbs',
         [
-            'Administrator'=> $this->url('admin'),
-            'Layout' => $this->url('admin', ['plugin'=>'layout']),
-        ]
-    )->render();
-
-    ?>
+            'listplugins' => $listplugins,
+            'currentNameplugin' => $currentNameplugin,
+            'listactions' => $listactions,
+            'currentNameaction' => $currentNameaction
+        ])?>
     <h2 class="text-danger">Layout / HTML /EVENT</h2>
 
     <div class="list-group w-100">

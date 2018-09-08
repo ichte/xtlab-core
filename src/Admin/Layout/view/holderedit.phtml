@@ -2,26 +2,23 @@
 /**
  * @var $this PhpRenderer
  * @var $item XT\Core\System\Placeholder\Placeholder
+ * @var $form \XT\Core\Admin\Layout\Form\FormHolder
  */
 ?>
 <div class="p-4 w-100">
-    <?=$this->dropdownMenu()->setName('Layout Edit')->render([
-        'Layout Edit' => $this->url('admin', ['plugin' => 'layout', 'act' =>'layoutedit']),
-        'Holder' => $this->url('admin', ['plugin' => 'layout', 'act' =>'holder']),
-        'BlockLayout' => $this->url('admin', ['plugin' => 'layout', 'act' =>'applyblocklayout']),
-        'InsertHTML' => $this->url('admin', ['plugin' => 'layout', 'act' =>'eventinserthtml']),
-        'Home Slider' => $this->url('admin', ['plugin' => 'layout', 'act' =>'editslide']),
-        'PluginView' => $this->url('admin', ['plugin' => 'pluginview']),
-        'ListenerGlobal' => $this->url('admin', ['plugin' => 'pluginview', 'act' => 'listenerglobal']),
 
-    ])?>
+    <?=$this->partial('dropdown_breadcrumbs',
+        [
+            'listplugins' => $listplugins,
+            'currentNameplugin' => $currentNameplugin,
+            'listactions' => $listactions,
+            'currentNameaction' => $currentNameaction
+        ])?>
+
     <?
-    echo $this->pageBreadcrumbs()->setItems([
-        'Administrator' => $this->url('admin'),
-        'Layout' => $this->url('admin', ['plugin' => 'layout']),
-        'Placeholder' => $this->url('admin', ['plugin' => 'layout', 'act'=>'placeholder']),
-        'Edit' => ''
-    ])->render();
+    $form->setAttribute('action', $this->url('admin', ['plugin' => 'options', 'act' => 'addgroup']));
+    $form->setAttribute('class', 'form');
+    $form->prepare();
     ?>
 
     <h3>Edit Placeholder</h3>
@@ -29,18 +26,19 @@
     <form method="POST">
             <div class="form-group">
                 <label><?=$this->translate('Name')?></label>
-                <input name="name" type="text" class="form-control" value="<?=$item->getName()?>" />
+                <?=$this->formrow($form->get('name'))?>
             </div>
             <div class="form-group">
                 <label><?=$this->translate('Description')?></label>
-                <textarea class="form-control"  name="description"><?=$item->getDescription()?></textarea>
+                <?=$this->formrow($form->get('description'))?>
+                <?=$this->formhidden($form->get($form->getNameCsrf()))?>
+                <?=$this->formhidden($form->get('placeholder_id'))?>
             </div>
 
 
             <div class="form-group">
                 <button class="btn btn-success btn-sm" name="action" type="submit" value="Save"><?=$this->translate('Save')?></button>
                 <button class="btn btn-danger btn-sm" name="action" type="submit" value="Delete"><?=$this->translate('Delete')?></button>
-
             </div>
 
 

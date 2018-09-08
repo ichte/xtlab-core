@@ -1,4 +1,4 @@
-<?
+<?php
 return [
     'Manager layout (.phtml)' =>                                                        'Quản lý các Layout (.phtml)',
     'Administrator CP' =>                                                               'Quản trị website',
@@ -23,5 +23,6 @@ return [
     'Description'=>                                                                     'Mô tả',
     'Save'=>                                                                            'Lưu',
     'Delete'=>                                                                          'Xóa',
-    'Redirect' =>                                                                       'Chuyển hướng'
+    'Redirect' =>                                                                       'Chuyển hướng',
+    'Add new group option'=>                                                            'Thêm nhóm tùy chọn thiết lập mới'
 ];

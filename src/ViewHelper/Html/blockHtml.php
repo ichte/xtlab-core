@@ -98,12 +98,12 @@ class blockHtml extends AbstractHelper
         $block = $nameholder.'_'.KeyView::key_block;
 
         if (isset($view->$block)) {
-            if (Common::keyholder_notemplate_exist($nameholder))
-            {
-                //No load Template
-
-            }
-            else
+//            if (Common::keyholder_notemplate_exist($nameholder))
+//            {
+//                //No load Template
+//
+//            }
+//            else
                 $html = $view->partial($view->$block, ['htmlblock'=>&$html]);
         }
 

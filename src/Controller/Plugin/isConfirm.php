@@ -9,7 +9,9 @@
 namespace XT\Core\Controller\Plugin;
 
 
+use XT\Core\Validator\Lang\TranslatorValidator;
 use Zend\Mvc\Controller\Plugin\AbstractPlugin;
+use Zend\Validator\Csrf;
 
 class isConfirm extends AbstractPlugin
 {
@@ -21,12 +23,23 @@ class isConfirm extends AbstractPlugin
     {
         $ctrl = $this->getController();
         $request = $ctrl->getRequest();
+        $params = $ctrl->params();
 
 
         if ($request->isPost()) {
+
+            $csrfaskbeforedone = new \Zend\Form\Element\Csrf('csrfaskbeforedone',['csrf_options'=>['timeout'=>'20']] );
+            $pascsrf = $csrfaskbeforedone->getCsrfValidator()->isValid($params->fromPost('csrfaskbeforedone', null));
+            if (!$pascsrf) {
+                foreach ($csrfaskbeforedone->getCsrfValidator()->getMessages() as $mgs) {
+                    echo $mgs;
+                }
+                die;
+            }
+
             if ($fielValues != null)
             {
-                $params = $ctrl->params();
+
                 foreach ($fielValues as $key => $fielValue) {
                     if ($params->fromPost($key, null) != $fielValue) return false;
                 }

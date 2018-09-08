@@ -1,0 +1,56 @@
+<?php
+/**
+ * @var PhpRenderer $this
+ */
+
+
+
+$csrflayoutedit = new \Zend\Form\Element\Csrf('csrflayoutedit',['csrf_options'=>['timeout'=>'1200']] );
+
+
+?>
+
+<div class="p-2 w-100">
+    <?=$this->partial('dropdown_breadcrumbs',
+        [
+            'listplugins' => $listplugins,
+            'currentNameplugin' => $currentNameplugin,
+            'listactions' => $listactions,
+            'currentNameaction' => $currentNameaction
+        ])?>
+
+        <p class="lead">Edit HTML files use in Layout, View</p>
+        <p class="help-block"> - File <code>.phtml</code> store at <code>Common::$cf->CF->common->pathtemplatedefault</code> -> <code>
+                <strong><?=realpath(XT\Core\Common\Common::$cf->CF->common->pathtemplatedefault)?></strong></code></p>
+        <p class="help-block"> - Block file receive <code>event</code> contain <?highlight_string('<?=$this->htmlblock?>')?></p>
+        <hr>
+
+        <div class="col-12">
+            <? foreach ($this->files as $key => $groupfile):?>
+                <div class="row">
+                    <div class="col-2"><?=$key?></div>
+                    <div class="col-10">
+                        <? foreach ($groupfile as $key1 => $file):?>
+                            <form class="p-1 float-left" method="POST">
+                                <?=$this->formhidden($csrflayoutedit)?>
+                                <button type="submit" class="btn btn-<?=(strpos($file,'block')?'success':'primary')?> btn-sm"><?=$key1?></button>
+                                <input name="file"  value="<?=$file?>" readonly="true" class="collapse" />
+                            </form>
+                        <?endforeach?>
+                    </div>
+                </div>
+                <hr>
+            <?endforeach?>
+        </div>
+</div>
+<div class="clearfix"></div>
+<p></p>
+<p></p>
+
+<form method="POST" class="form-inline bg-light p-4 w-100">
+    <div class="form-group w-100">
+        <?=$this->formhidden($csrflayoutedit)?>
+        <input name="filecreatenew" placeholder="block/new-file-html.phtml" type="text"  class="form-control w-50"/>
+        <button  type="submit" name="action" value="New" class="btn btn-danger ml-4 pull-right"><?=' + '.$this->translate('Add')?> File</button>
+    </div>
+</form>

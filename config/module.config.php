@@ -10,9 +10,10 @@ return [
             ],
         ],
     ],
+    
 
     'admin_plugins' => [
-        'layout'        => XT\Core\Admin\Layout\Layout::class,
+        'layout'              => XT\Core\Admin\Layout\Layout::class,
         'basiccommand'        => XT\Core\Admin\Common\BasicCommand::class
     ],
     'coresession' => [
@@ -27,6 +28,7 @@ return [
         'factories'=>[
             \XT\Core\System\Placeholder\PlaceholderManager::class            => \XT\Core\System\Placeholder\PlaceholderManager::class,
             \XT\Core\Event\InsertHtml\InsertHtmlManager::class               => \XT\Core\Event\InsertHtml\InsertHtmlManager::class,
+            \XT\Core\Event\BlockLayout\BlockLayoutManager::class             => \XT\Core\Event\BlockLayout\BlockLayoutManager::class,
             'navigation'                                                     => 'Zend\Navigation\Service\DefaultNavigationFactory',
 
         ],

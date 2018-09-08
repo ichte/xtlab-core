@@ -4,14 +4,13 @@
  */
 ?>
 <div class="w-100 m-4">
-    <?
-    echo $this->pageBreadcrumbs()->setItems(
+    <?=$this->partial('dropdown_breadcrumbs',
         [
-            'Administrator'=> $this->url('admin'),
-            'Common' => $this->url('admin', ['plugin'=>'basiccommand']),
-        ]
-    )->render();
-    ?>
+            'listplugins' => $listplugins,
+            'currentNameplugin' => $currentNameplugin,
+            'listactions' => $listactions,
+            'currentNameaction' => $currentNameaction
+        ])?>
     <h2 class="text-danger"><?=$this->translate('Basic Settings')?></h2>
 
     <div class="list-group w-100">

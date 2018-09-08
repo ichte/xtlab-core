@@ -24,7 +24,7 @@ class Common
      */
     public static $sm;
     /**
-     * @var \Zend\EventManager\EventManager
+     * @var \XT\Core\Event\EventManager\EventManager
      */
     public static $em;
 
@@ -32,7 +32,13 @@ class Common
      * @var Zend\Mvc\Application
      */
     public static $app;
-    
+
+    /**
+     * Acesss by $cf->CF-> ...
+     * @var \Options;
+     */
+    public static $cf;
+
     /**
      * @return \Zend\Http\PhpEnvironment\Request
      */

@@ -2,113 +2,28 @@
 /**
  * @var PhpRenderer $this
  */
+$csrflayoutedit = new \Zend\Form\Element\Csrf('csrflayoutedit',['csrf_options'=>['timeout'=>'1200']] );
 
 
 ?>
 
 <div class="p-2 w-100">
-    <?=$this->dropdownMenu()->setName('Layout Edit')->render([
-        'Layout Edit' => $this->url('admin', ['plugin' => 'layout', 'act' =>'layoutedit']),
-        'Holder' => $this->url('admin', ['plugin' => 'layout', 'act' =>'holder']),
-        'BlockLayout' => $this->url('admin', ['plugin' => 'layout', 'act' =>'applyblocklayout']),
-        'InsertHTML' => $this->url('admin', ['plugin' => 'layout', 'act' =>'eventinserthtml']),
-        'Home Slider' => $this->url('admin', ['plugin' => 'layout', 'act' =>'editslide']),
-        'PluginView' => $this->url('admin', ['plugin' => 'pluginview']),
-        'ListenerGlobal' => $this->url('admin', ['plugin' => 'pluginview', 'act' => 'listenerglobal']),
-
-    ])?>
-    <? if ($this->fileedit != '') :?>
-        <?
-        echo $this->pageBreadcrumbs()->setItems([
-            'Administrator' => $this->url('admin'),
-            'Layout' => $this->url('admin', ['plugin' => 'layout']),
-            'PHTML' => $this->url('admin', ['plugin' => 'layout', 'act'=>'layoutedit']),
-            'edit' => $this->url('admin', ['plugin' => 'layout', 'act'=>'layoutedit'])
-        ])->render();
-        ?>
-        <form method="POST">
-            <code><?=$this->fileedit?> : Luôn Backup dữ liệu trước khi cập nhật</code>
-            <input style="display: none;" class="form-control" name="file" style="width: 50%;" value="<?=$this->fileedit?>" type="text" readonly="true" />
-            <textarea id="filecontent" name="filecontent" class="form-control" style="width: 100%; min-height: 500px;" spellcheck="false"><?=$this->filecontent?></textarea>
-            <div class="form-group p-t-1">
-                <button type="submit" name="action" value="Save" class="btn btn-success">Save</button>
-                <button type="submit" name="action" value="Delete" class="btn btn-success">Delete</button>
-            </div>
-            <?$this->showHtmlEditcode('filecontent')?>
-        </form>
-    <?else:?>
-        <?
-        echo $this->pageBreadcrumbs()->setItems([
-            'Administrator' => $this->url('admin'),
-            'Layout' => $this->url('admin', ['plugin' => 'layout']),
-            'PHTML' => $this->url('admin', ['plugin' => 'layout', 'act'=>'layoutedit'])
-        ])->render();
-        ?>
-        <p class="lead">
-            Các định nghĩa khối HTML trước khi render các khu vực của Layout hoặc View<br>
-         </p>
-        <p class="help-block"> - Các block <code>.phtml</code> lưu tại gốc <code>common->pathtemplatedefault</code> => <code><strong><?=realpath(\Common::$cf->AHD->common->pathtemplatedefault)?></strong></code></p>
-        <p class="help-block"> - Các file block có nhận <code>event</code> phải có đoạn mã <?highlight_string('<?=$this->htmlblock?>')?></p>
-        <hr>
-
-        <div class="col-12">
-            <? foreach ($this->files as $key => $groupfile):?>
-                <div class="row">
-                    <div class="col-2"><?=$key?></div>
-                    <div class="col-10">
-                        <? foreach ($groupfile as $key1 => $file):?>
-                            <form class="p-1 float-left" method="POST">
-                                <button type="submit" class="btn btn-<?=(strpos($file,'block')?'success':'primary')?> btn-sm"><?=$key1?></button>
-                                <input name="file"  value="<?=$file?>" readonly="true" class="collapse" />
-                            </form>
-                        <?endforeach?>
-                    </div>
-                </div>
-                <hr>
-            <?endforeach?>
-            <div class="row">
-                <div class="col-2">Special</div>
-                <div class="col-10">
-                    <form class="p-1 float-left" method="POST">
-                        <button type="submit" class="btn btn-primary btn-sm">slide.phtml</button>
-                        <input name="file"  value="/home/slide.phtml" readonly="true" class="collapse" />
-                    </form>
-                </div>
-            </div>
-
+    <?=$this->partial('dropdown_breadcrumbs',
+        [
+            'listplugins' => $listplugins,
+            'currentNameplugin' => $currentNameplugin,
+            'listactions' => $listactions,
+            'currentNameaction' => $currentNameaction
+        ])?>
+    <form method="POST">
+        <?=$this->formhidden($csrflayoutedit)?>
+        <code><?=$this->fileedit?> : Allway backup file before update</code>
+        <input style="display: none;" class="form-control" name="file" style="width: 50%;" value="<?=$this->fileedit?>" type="text" readonly="true" />
+        <textarea id="filecontent" name="filecontent" class="form-control" style="width: 100%; min-height: 500px;" spellcheck="false"><?=$this->filecontent?></textarea>
+        <div class="form-group pt-4">
+            <button type="submit" name="action" value="Save" class="btn btn-success">Save</button>
+            <button type="submit" name="action" value="Delete" class="btn btn-danger">Delete</button>
         </div>
-
-    <?endif?>
-
-
-</div>
-<div class="clearfix"></div>
-<p></p>
-<p></p>
-
-
-<? if ($this->fileedit != '') :?>
-    <textarea name="filecontenthelp" spellcheck="false"></textarea>
-<?else:?>
-    <form method="POST" class="form-inline bg-secondary p-4 w-100">
-        <div class="form-group w-100">
-            <input name="file" placeholder="block/new-file-html.phtml" type="text"  class="form-control" style="width: 50%;" />
-            <button  type="submit" name="action" value="New" class="btn btn-success ml-4 pull-right">Tạo file mới</button>
-        </div>
+        <?$this->enableCodeEdit('filecontent')?>
     </form>
-
-<?endif;?>
-<?
-if ($this->fileedit != '')
-    $this->xteditor('filecontenthelp', [
-            'width' => "100%",
-            'height' => "200",
-            'uiColor' => '#F4F4F4',
-            'autoParagraph' => false,
-            'allowedContent' => true,
-            'extraAllowedContent' => '*(*);*{*}'
-        ]
-    );
-?>
-
-
+</div>

@@ -2,35 +2,19 @@
 /**
  * @var $this PhpRenderer
  */
-use XT\Core\Common\Common;
 ?>
 <div class="p-4 w-100">
-    <?=$this->dropdownMenu()->setName('InsertHTML')->render([
-        'Layout Edit' => $this->url('admin', ['plugin' => 'layout', 'act' =>'layoutedit']),
-        'Holder' => $this->url('admin', ['plugin' => 'layout', 'act' =>'holder']),
-        'BlockLayout' => $this->url('admin', ['plugin' => 'layout', 'act' =>'applyblocklayout']),
-        'InsertHTML' => $this->url('admin', ['plugin' => 'layout', 'act' =>'eventinserthtml']),
-        'Home Slider' => $this->url('admin', ['plugin' => 'layout', 'act' =>'editslide']),
-        'PluginView' => $this->url('admin', ['plugin' => 'pluginview']),
-        'ListenerGlobal' => $this->url('admin', ['plugin' => 'pluginview', 'act' => 'listenerglobal']),
-
-    ])?>
-    <?
-    echo $this->pageBreadcrumbs()->setItems([
-        'Administrator' => $this->url('admin'),
-        'Layout' => $this->url('admin', ['plugin' => 'layout']),
-        'InsertHTML' => $this->url('admin', ['plugin' => 'layout', 'act'=>'eventinserthtml']),
-        //'Edit' => ''
-    ])->render();
-    ?>
-
+    <?=$this->partial('dropdown_breadcrumbs',
+        [
+            'listplugins' => $listplugins,
+            'currentNameplugin' => $currentNameplugin,
+            'listactions' => $listactions,
+            'currentNameaction' => $currentNameaction
+        ])?>
 
     <div class="p-2 w-100">
-        <h5>Chèn HTML vào các sự kiện theo holder</h5>
-        <p class="alert alert-warning">
-            Dữ liệu này được export tới file <strong>config/block-html-config.php</strong> để <strong>onBootstrap</strong>
-            tải và tạo các Listener tương ứng khi để nội dung file HTML chèn tại <strong>holder</strong> phát đi sự kiện.
-        </p>
+        <h5>Insert HTML to Placeholder</h5>
+        
 
         <?
         $list = $this -> listeventblock;
@@ -59,7 +43,7 @@ use XT\Core\Common\Common;
 
         };
 
-        $controls = Common::$sm->get('config')['controllers'];
+        $controls= XT\Core\Common\Common::$sm->get('config')['controllers'];
         $controller = [];
         foreach ($controls as $key => $cc) {
             if (!isset($controller[$key]))
@@ -121,7 +105,7 @@ use XT\Core\Common\Common;
 
         <div style="padding: 20px; text-align: right;">
             <form method="POST">
-                <a class="btn btn-warning" href="<?=$this->url('admin', ['plugin'=>'layout', 'act' => 'eventinserthtmledit'])?>">+ Thêm Event Insert HTML</a>
+                <a class="btn btn-warning" href="<?=$this->url('admin', ['plugin'=>'layout', 'act' => 'eventinserthtmladd'])?>">+ Add new Event</a>
                 <input class="btn btn-success" type="submit" value="Export Config" />
             </form>
         </div>
