@@ -29,6 +29,8 @@ return [
             \XT\Core\System\Placeholder\PlaceholderManager::class            => \XT\Core\System\Placeholder\PlaceholderManager::class,
             \XT\Core\Event\InsertHtml\InsertHtmlManager::class               => \XT\Core\Event\InsertHtml\InsertHtmlManager::class,
             \XT\Core\Event\BlockLayout\BlockLayoutManager::class             => \XT\Core\Event\BlockLayout\BlockLayoutManager::class,
+            \XT\Core\Event\ViewPlace\ViewPlaceManager::class                 => \XT\Core\Event\ViewPlace\ViewPlaceManager::class,
+            \XT\Core\Event\GlobalListener\GlobalListenerManager::class       => \XT\Core\Event\GlobalListener\GlobalListenerManager::class,
             'navigation'                                                     => 'Zend\Navigation\Service\DefaultNavigationFactory',
 
         ],
@@ -39,10 +41,13 @@ return [
     ],
 
 
+    'templatepathsys'   => realpath(__DIR__.'/../src/template'),
+    'globallistenersys' => realpath(__DIR__.'/../src/Event/Listener/GlobalListener'),
+
 
     'view_helpers'       =>  include 'viewhelper.config.php',
     'view_manager'       =>  include 'viewmanager.config.php',
     'controller_plugins' =>  include 'controller_plugins.config.php',
     'log'                =>  include 'log.config.php',
-    'caches'             =>  include 'cache.config.php'
+    'caches'             =>  include 'cache.config.php',
 ];

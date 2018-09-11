@@ -30,17 +30,30 @@ $csrflayoutedit = new \Zend\Form\Element\Csrf('csrflayoutedit',['csrf_options'=>
                 <div class="row">
                     <div class="col-2"><?=$key?></div>
                     <div class="col-10">
-                        <? foreach ($groupfile as $key1 => $file):?>
+                        <? foreach ($groupfile as $file):?>
+                            <?
+                                $short = $file['short'];
+                                $name = $file['name'];
+                                $type = $file['type'];
+                                if ($type == 'system') $class = 'secondary';
+                                else  if ($type == 'overried')  $class = 'warning';
+                                else $class = 'primary';
+
+                            ?>
                             <form class="p-1 float-left" method="POST">
                                 <?=$this->formhidden($csrflayoutedit)?>
-                                <button type="submit" class="btn btn-<?=(strpos($file,'block')?'success':'primary')?> btn-sm"><?=$key1?></button>
-                                <input name="file"  value="<?=$file?>" readonly="true" class="collapse" />
+                                <button type="submit" class="btn btn-<?=$class?> btn-sm"><?=$short?></button>
+                                <input name="file"  value="<?=$name?>" readonly="true" class="collapse" />
                             </form>
                         <?endforeach?>
                     </div>
                 </div>
                 <hr>
             <?endforeach?>
+            Location of file:
+            <span class="badge badge-secondary ">System</span>
+            <span class="badge badge-warning ">Overried</span>
+            <span class="badge badge-primary ">Application</span>
         </div>
 </div>
 <div class="clearfix"></div>
@@ -52,5 +65,9 @@ $csrflayoutedit = new \Zend\Form\Element\Csrf('csrflayoutedit',['csrf_options'=>
         <?=$this->formhidden($csrflayoutedit)?>
         <input name="filecreatenew" placeholder="block/new-file-html.phtml" type="text"  class="form-control w-50"/>
         <button  type="submit" name="action" value="New" class="btn btn-danger ml-4 pull-right"><?=' + '.$this->translate('Add')?> File</button>
+        <button  type="submit" name="action" value="Map" class="btn btn-secondary ml-4 pull-right">Build Template Path</button>
+        <?if (file_exists('config/autoload/templatemap.global.php')):?>
+            <button  type="submit" name="action" value="ClearMap" class="btn btn-secondary ml-4 pull-right">Remove Maps</button>
+        <?endif;?>
     </div>
 </form>

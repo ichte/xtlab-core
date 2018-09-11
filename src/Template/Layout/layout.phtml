@@ -23,16 +23,16 @@ echo $this->headStyle(),PHP_EOL;
 echo '</head>
 <body>
 ';
-$this->blockHtml(KeyView::HEADER); echo PHP_EOL;
+$this->renderPlace(KeyView::HEADER); echo PHP_EOL;
 
 echo "<div ", Common::getBags()->Container,">";
-$this->blockHtml(KeyView::NAVSIDEBAR); echo PHP_EOL;
-$this->blockHtml(KeyView::CONTENT); echo PHP_EOL;
-$this->blockHtml(KeyView::CONTENTASIDE); echo PHP_EOL;
+$this->renderPlace(KeyView::NAVSIDEBAR); echo PHP_EOL;
+$this->renderPlace(KeyView::CONTENT); echo PHP_EOL;
+$this->renderPlace(KeyView::CONTENTASIDE); echo PHP_EOL;
 echo "</div>";
 
 
-$this->blockHtml(KeyView::FOOTER); echo PHP_EOL;
+$this->renderPlace(KeyView::FOOTER); echo PHP_EOL;
 echo $this->inlineScript();
 echo '</body>
 </html>';

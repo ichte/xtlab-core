@@ -35,7 +35,7 @@ class BasicCommand extends AbstractPlugin
 
 
 
-        $view->setVariables(['list' => $this->getListaction()]);
+        $view->setVariables(['list' => $this->getListactionIndex()]);
         return $view;
     }
 
@@ -44,47 +44,57 @@ class BasicCommand extends AbstractPlugin
         $ar = [];
         $ar['clearcache'] = [
             'name' => 'Xóa cache hệ thống',
-            'description' => 'Xóa cache để hệ thống render lại theo dữ liệu mới nhất'
+            'description' => 'Xóa cache để hệ thống render lại theo dữ liệu mới nhất',
+            'index' => true
         ];
         $ar['siteinfo'] = [
             'name' => 'Thông tin tham số website',
-            'description' => 'Các tham số nhân của website'
+            'description' => 'Các tham số nhân của website',
+            'index' => true
         ];
         $ar['templatemap'] = [
             'name' => 'Các Template Map',
-            'description' => 'Tham số trỏ đến các file .phtml của hệ thống'
+            'description' => 'Tham số trỏ đến các file .phtml của hệ thống',
+            'index' => true
         ];
         $ar['favicon'] = [
             'name' => 'Đổi biểu tượng Favicon',
-            'description' => 'Đổi biểu tượng Favicon'
+            'description' => 'Đổi biểu tượng Favicon',
+            'index' => true
         ];
         $ar['logo'] = [
             'name' => 'Đổi Logo',
-            'description' => 'Thay đổi logo của website'
+            'description' => 'Thay đổi logo của website',
+            'index' => true
         ];
         $ar['listeventname'] = [
             'name' => 'Event',
-            'description' => 'Tên các event trong hệ thống'
+            'description' => 'Tên các event trong hệ thống',
+            'index' => true
         ];
         $ar['memcached'] = [
             'name' => 'MemCached',
-            'description' => 'Thông tin về Memcached'
+            'description' => 'Thông tin về Memcached',
+            'index' => true
         ];
 
         $ar['opcache'] = [
             'name' => 'OPcache',
-            'description' => 'Thông tin về OPcache'
+            'description' => 'Thông tin về OPcache',
+            'index' => true
         ];
 
         $ar['log'] = [
             'name' => 'Logs',
-            'description' => 'Activity logs'
+            'description' => 'Activity logs',
+            'index' => true
         ];
 
 
         $ar['help'] = [
             'name' => 'Help',
-            'description' => 'Thông tin Code'
+            'description' => 'Thông tin Code',
+            'index' => true
         ];
 
         $this->setListaction($ar);

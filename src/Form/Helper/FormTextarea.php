@@ -6,7 +6,7 @@ use Zend\Form\View\Helper\AbstractHelper;
 
 class FormTextarea extends AbstractHelper
 {
-    protected $script = 'textarea_autogrow';
+    protected $script = 'form/element/textarea-autogrow.phtml';
     public function __invoke(ElementInterface $element)
     {
         $name   = $element->getName();

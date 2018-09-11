@@ -29,7 +29,7 @@ use XT\Core\Event\EventManager\EventManager;
 use XT\Core\System\KeyView;
 use Zend\View\Helper\AbstractHelper;
  
-class blockHtml extends AbstractHelper
+class renderPlace extends AbstractHelper
 {
     /**
      * @var \Zend\Http\PhpEnvironment\Request
@@ -98,6 +98,7 @@ class blockHtml extends AbstractHelper
         $block = $nameholder.'_'.KeyView::key_block;
 
         if (isset($view->$block)) {
+
 //            if (Common::keyholder_notemplate_exist($nameholder))
 //            {
 //                //No load Template

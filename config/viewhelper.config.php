@@ -8,7 +8,7 @@ return [
 
     'invokables' => [
         'pageBreadcrumbs'                                       => XT\Core\ViewHelper\Breadcrumbs\Breadcrumbs::class,
-        'blockHtml'                                             => XT\Core\ViewHelper\Html\blockHtml::class,
+        'renderPlace'                                           => XT\Core\ViewHelper\Html\renderPlace::class,
         'enableCodeEdit'                                        => XT\Core\ViewHelper\Html\enableCodeEdit::class,
         'dropdownMenu'                                          => \XT\Core\ViewHelper\Menu\DropdownMenu::class,
         \Zend\Form\View\Helper\FormElementErrors::class         => \XT\Core\Form\Helper\FormElementErrors::class,

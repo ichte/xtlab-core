@@ -1,7 +1,7 @@
 <?php
 namespace XT\Core\Common;
 
-use XT\Core\Event\BlockHtml;
+use XT\Core\Event\Listener\BlockHtml;
 use XT\Core\System\Bags;
 use Zend\EventManager\EventManager;
 use Zend\EventManager\LazyListener;
@@ -138,6 +138,23 @@ class Common
              'method'   => 'execute',
             ],
             $serviceManager, $ars));
+    }
+
+    public static function removeCacheMapConfig()
+    {
+        $module = self::$sm->get('ModuleManager')->getEvent()->getParams()['configListener'];
+        $module = $module->getOptions();
+        $cachedir = $module->getCacheDir();
+        $configcachefile = $module->getConfigCacheFile();
+        $modulemap = $module->getModuleMapCacheFile();
+
+
+        if (file_exists($configcachefile))
+            unlink($configcachefile);
+
+        if (file_exists($modulemap))
+            unlink($modulemap);
+
     }
 
 

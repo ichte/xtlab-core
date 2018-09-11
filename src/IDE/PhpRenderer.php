@@ -1,14 +1,14 @@
 <?php
-use XT\Core\ViewHelper\Html\blockHtml;
+use XT\Core\ViewHelper\Html\renderPlace;
 use XT\Core\ViewHelper\Breadcrumbs\Breadcrumbs;
 use Zend\I18n\View\Helper\Translate;
 use Zend\Form\View;
-use \XT\Core\ViewHelper\Html\enableCodeEditl
+use \XT\Core\ViewHelper\Html\enableCodeEdit;
 /***
  * Class PhpRender - NOT USE
  * @method  Breadcrumbs   pageBreadcrumbs()
- * @method  blockHtml     blockHtml($keyholder)
- * @method  DropdownMenu  dropdownMenu()
+ * @method  renderPlace     renderPlace($keyholder)
+ * @method  \XT\Core\ViewHelper\Menu\DropdownMenu  dropdownMenu()
  * @method  Translate     translate($mgs)
  * @method  enableCodeEdit enableCodeEdit($id)
  *

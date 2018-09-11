@@ -24,6 +24,11 @@ abstract class AbstractListener
 
     }
 
+    public function __invoke($servicemanager, $resolvedName, $options)
+    {
+
+         $this->init($servicemanager, $options);
+    }
     public function init($servicemanager, $options = null)
     {
         $this->serviceManager = $servicemanager;

@@ -44,7 +44,7 @@ class DropdownMenu extends AbstractHelper
 
         }
 $ul=<<<"HTML"
-                <div class="btn-group">
+                <div class="btn-group mb-1">
                     <button type="button" class="btn btn-seconday dropdown-toggle btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         {$this->icon} {$this->name}
                     </button>
@@ -55,3 +55,4 @@ HTML;
     }
 
 }
+

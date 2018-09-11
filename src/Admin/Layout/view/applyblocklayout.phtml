@@ -77,8 +77,8 @@
         ?>
 
         <div class="row ml-1 mr-1" style="font-weight: bold;">
-            <div class="col-3">Controller</div>
-            <div class="col-3">Action</div>
+            <div class="col-4">Controller</div>
+            <div class="col-2">Action</div>
             <div class="col-4">Block HTML</div>
             <div class="col-2">PlaceHolder</div>
         </div>
@@ -88,10 +88,10 @@
                 <?$ctrl = $item['Controller']?>
 
             <?endif?>
-            <div class="row  ml-1 mr-1 <?=$getclass($item['Controller'],$item['Action'])?>" style="border-bottom: 1px solid whitesmoke; padding: 2px;">
+            <div class="row  ml-1 mr-1 <?=$getclass($item['Controller'],$item['Action'])?> border-top">
 
-                <div class="col-3"><a href="<?=$this->url('admin', ['plugin'=>'layout','id'=>$item['id'], 'act' => 'applyblocklayoutedit' ])?>" style="color:<? if($item['active']) echo '#333'; else echo 'silver';?>"><?=$item['Controller']?></a></div>
-                <div class="col-3"><?=$item['Action']?></div>
+                <div class="col-4"><a href="<?=$this->url('admin', ['plugin'=>'layout','id'=>$item['id'], 'act' => 'applyblocklayoutedit' ])?>" style="color:<? if($item['active']) echo '#333'; else echo 'silver';?>"><?=$item['Controller']?></a></div>
+                <div class="col-2"><?=$item['Action']?></div>
 
                 <div class="col-4"><?=$item['Block']?></div>
                 <div class="col-2"><code><?=$item['placeholder']?></code></div>
@@ -101,8 +101,8 @@
         <hr>
         <div>
             <form method="POST">
-                <a class="btn btn-success" href="<?=$this->url('admin', ['plugin'=>'layout', 'act' => 'applyblocklayoutedit'])?>">Thêm mới</a>
-                <input class="btn btn-success" type="submit" value="saveconfig" />
+                <a class="btn btn-warning" href="<?=$this->url('admin', ['plugin'=>'layout', 'act' => 'applyblocklayoutadd'])?>"><?=' + '.$this->translate('Add')?></a>
+                <a class="btn btn-primary" href="<?=$this->url('admin', ['plugin'=>'layout', 'act' => 'exportblocklayout'])?>"><?=$this->translate('Apply')?></a>
             </form>
         </div>
 

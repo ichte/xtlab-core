@@ -6,7 +6,7 @@ use Zend\Form\View\Helper\AbstractHelper;
 
 class FormTextAutoComplete extends AbstractHelper
 {
-    protected $script = 'text-autocomplete';
+    protected $script = 'form/element/text-autocomplete.phtml';
     public function __invoke(ElementInterface $element)
     {
         $name   = $element->getName();

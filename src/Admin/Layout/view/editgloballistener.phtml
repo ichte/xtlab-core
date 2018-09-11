@@ -1,0 +1,80 @@
+<?
+/**
+ * @var PhpRenderer $this
+ * @var \XT\Core\Admin\Layout\Form\FormGlobalListener $form
+ */
+?>
+<div class="p-2 w-100 bg-light">
+    <?=$this->partial('dropdown_breadcrumbs',
+        [
+            'listplugins' => $listplugins,
+            'currentNameplugin' => $currentNameplugin,
+            'listactions' => $listactions,
+            'currentNameaction' => $currentNameaction
+        ])?>
+    <?
+
+    $form->prepare();
+    echo $this->form()->openTag($form);
+    echo $this->formHidden($form->get('id'));
+    echo $this->formRow($form->get($form->getNameCsrf()));
+    echo $this->formelementerrors($form->get($form->getNameCsrf()));
+
+
+    ?>
+
+    <div class="mb-4 pb-4">
+        <div class="form-row mb-1">
+            <?= $this->formRow($form->get('classname')) ?>
+        </div>
+        <div class="form-row mb-1">
+            <?= $this->formRow($form->get('event')) ?>
+        </div>
+
+
+        <div class="form-row mb-1">
+            <?= $this->formRow($form->get('description')) ?>
+        </div>
+        <div class="form-row mb-1">
+
+            <div class="col-2">
+                <?= $this->formlabel($form->get('code')) ?>
+            </div>
+            <div class="col-10">
+                <?= $this->formelement($form->get('code')) ?>
+                <?$this->enableCodeEdit('code')?>
+
+            </div>
+        </div>
+
+        <div class="form-row">
+            <label class="col-2 col-form-label"></label>
+            <?= $this->formRow($form->get('active')) ?>
+        </div>
+
+        <?if (isset($dbListener)):?>
+            <div class="form-group">
+                <button name="action" class="btn btn-success pull-right" value="Save">Save</button>
+                <button name="action" class="btn btn-danger pull-right mr-1" value="Delete" type="submit">Delete</button>
+            </div>
+        <?else:?>
+            <div class="form-group">
+                <button name="action" class="btn btn-warning btn-lg pull-right" value="Save">Create</button>
+            </div>
+
+        <?endif;?>
+
+
+
+    </div>
+
+    <?=$this->form()->closeTag()?>
+
+    <div>
+        <p>List events template default:</p>
+        <?=$this->htmlList(\XT\Core\System\KeyView::listEventTemplate())?>
+    </div>
+
+
+</div>
+

@@ -1,0 +1,80 @@
+<?
+/**
+ * @var PhpRenderer $this
+ * @var $listener XT\Core\Event\GlobalListener\GlobalListener
+ */
+?>
+<style>
+    .listevent li,.listevent ul {display: inline-block;  padding: 0px; background: grey; color: white; border-radius: 3px; margin: 3px;}
+    .listevent ul {background: transparent !important;}
+</style>
+<div class="p-2 w-100">
+    <h5>LISTENER</h5>
+    <?=$this->partial('dropdown_breadcrumbs',
+        [
+            'listplugins' => $listplugins,
+            'currentNameplugin' => $currentNameplugin,
+            'listactions' => $listactions,
+            'currentNameaction' => $currentNameaction
+        ])?>
+    <table class="table table-sm table-bordered">
+        <tr class="bg-warning">
+            <th>CLASS LISTENER</th>
+            <th>EVENT</th>
+            <th>STATE</th>
+        </tr>
+
+
+    <?
+    $i = 1;
+    ?>
+
+    <?foreach ($dbListeners as $listener): ?>
+
+        <tr>
+                    <td>
+                        <h4>
+                            <a href="<?=$this->url('admin', ['plugin'=>'layout','act' =>'editgloballistener', 'id'=>$listener->getClassname()])?>">
+                                <?=$listener->getClassname()?>
+                            </a>
+                        </h4>
+                        <small><?=$listener->getDescription()?></small>
+                    </td>
+
+                    <td><small class="listevent"><?=$this->htmlList(explode('|',$listener->getEvent()))?></small></td>
+                    <td>
+                        <?if($listener->getActive()):?>
+                            <span class="badge badge-primary">Active</span>
+                        <?else:?>
+                            <span class="badge badge-secondary">Active</span>
+                        <?endif;?>
+                    </td>
+        </tr>
+
+    <?endforeach;?>
+    <?foreach ($localListeners as $listener): ?>
+
+        <tr><td colspan="2">Template Listener in System</td></tr>
+        <tr class="bg-secondary text-white">
+            <td>
+                <h4>
+                    <a class="text-white" href="<?=$this->url('admin', ['plugin'=>'layout','act' =>'editgloballistener', 'id'=>$listener->getClassname()])?>">
+                        <?=$listener->getClassname()?>
+                    </a>
+                </h4>
+                <small><?=$listener->getDescription()?></small>
+            </td>
+
+            <td></td>
+            <td></td>
+        </tr>
+
+    <?endforeach;?>
+
+    </table>
+    <div class="p-2" style="background: whitesmoke">
+        <a
+                class="btn btn-success"
+                href="<?=$this->url('admin', ['plugin'=>'layout','act' =>'createglobalistener'])?>"><?=' + '.$this->translate('Add')?></a>
+    </div>
+</div>

@@ -1,6 +1,6 @@
 <?php
 
-namespace XT\Core\Event\InsertHtml;
+namespace XT\Core\Event\ViewPlace;
 
 
 use XT\Core\Common\Common;
@@ -8,83 +8,77 @@ use Zend\Db\Adapter\Adapter;
 use Zend\Db\Sql\Select;
 use Zend\Db\TableGateway\TableGateway;
 
-class InsertHtmlManager
+class ViewPlaceManager
 {
     /**
      * @var TableGateway
      */
-    protected $tableEventHtml;
+    protected $tablepluginView;
     public function __invoke($sm)
     {
-        if ($this->tableEventHtml == null)
+        if ($this->tablepluginView == null)
         {
             $dbAdapter = $sm->get(Adapter::class);
             $resultSetPrototype = new \Zend\Db\ResultSet\ResultSet();
-            $resultSetPrototype->setArrayObjectPrototype(new InsertHTML());
+            $resultSetPrototype->setArrayObjectPrototype(new ViewPlace());
 
-            $this->tableEventHtml  = new TableGateway('template_inserthtml', $dbAdapter, null, $resultSetPrototype);
+            $this->tablepluginView  = new TableGateway('viewplace', $dbAdapter, null, $resultSetPrototype);
         }
         return $this;
     }
 
 
-
-
-
-    public function allEventHTMLInsert()
+    public function allClassActive()
     {
-        return $this->tableEventHtml->select(function (Select $select) {
+        return $this->tablepluginView->select(function (Select $select) {
+            $select->where(['active' => true]);
+            $select->order(['Controller' => 'ASC', 'Action' => 'ASC', 'Event' => 'ASC']);
+        })->toArray();
+    }
+
+    public function allClass()
+    {
+        return $this->tablepluginView->select(function (Select $select) {
             $select->order(['Controller' => 'ASC', 'Action' => 'ASC', 'Event' => 'ASC']);
         })->toArray();
     }
 
     public function find($id)
     {
-        return $this->tableEventHtml->select(['id' =>$id])->current();
+        return $this->tablepluginView->select(['id' =>$id])->current();
     }
 
     public function delete($id)
     {
-        $this->tableEventHtml->delete(['id' => $id]);
+        $this->tablepluginView->delete(['id' => $id]);
         $this->exportconfig();
 
     }
 
     public function update($data, $id)
     {
-        $this->tableEventHtml->update($data, ['id' => $id]);
+
+        $this->tablepluginView->update($data, ['id' => $id]);
         $this->exportconfig();
     }
 
     public function insertnew($data)
     {
-        if (isset($data['id']))
-            unset($data['id']);
-        $id = $this->tableEventHtml->insert($data);
+        $id = $this->tablepluginView->insert($data);
         $this->exportconfig();
-        return $this->tableEventHtml->getLastInsertValue();
+        return $this->tablepluginView->getLastInsertValue();
     }
 
     public function exportconfig()
     {
-        $obs = $this->tableEventHtml->select(function (Select $select) {
-            $select->where(['active' => true]);
-            $select->order(['Controller' => 'ASC', 'Action' => 'ASC', 'Event' => 'ASC']);
-            })->toArray();
 
-        $listsave = new \ArrayObject();
-        foreach ($obs as $ob)
-        {
-            $listsave[] = $ob;
-        }
         $config = new \Zend\Config\Config([],true);
-        $ar = $listsave->getArrayCopy();
-        foreach ($ar as &$ob)
+        foreach ($this->allClassActive() as $ob)
         {
             $c1 = $ob['Controller'];
             $c2 = $ob['Action'];
             $c3 = $ob['Event'];
-            $c4 = $ob['Block'];
+            $c4 = $ob['Class'];
 
             if (!isset($config[$c1])) $config[$c1] = [];
             $ctrl = &$config[$c1];
@@ -96,10 +90,10 @@ class InsertHtmlManager
 
         }
         $writer = new \Zend\Config\Writer\PhpArray();
-        $writer->toFile('config/listener_insert_html.php', $config);
-
+        $writer->toFile('config/insert_viewplace.php', $config);
         if (file_exists('config/listener_merge.cache'))
             unlink('config/listener_merge.cache');
+
         Common::removeCacheMapConfig();
     }
 

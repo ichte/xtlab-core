@@ -1,0 +1,69 @@
+<?
+/**
+ * @var $this PhpRenderer
+ * @var $form \XT\Core\Admin\Layout\Form\FormViewPlace
+ * @var $viewplace XT\Core\Event\ViewPlace\ViewPlace
+ */
+?>
+<div class="p-4 w-100">
+    <?=$this->partial('dropdown_breadcrumbs',
+        [
+            'listplugins' => $listplugins,
+            'currentNameplugin' => $currentNameplugin,
+            'listactions' => $listactions,
+            'currentNameaction' => $currentNameaction
+        ])?>
+
+
+    <div class="p-2 w-100 pb-4">
+        <h5>Edit - ViewPlace Listener</h5>
+
+
+            <?
+            $form->prepare();
+
+            ?>
+           <?=$this->form()->openTag($form)?>
+                <div class="p-1">
+
+                    <?=$this->formrow($form->get('id'))?>
+                    <?=$this->formrow($form->get($form->getNameCsrf()))?>
+
+                    <div class="form-group">
+                        <label class="text-dark">Controller + Action</label>
+                        <?=$this->formrow($form->get('ControllerAction'))?>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="text-dark">Event name</label>
+                        <?=$this->formrow($form->get('Event'))?>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="text-dark">HTML</label>
+                        <?=$this->formrow($form->get('Class'))?>
+                    </div>
+
+                    <div class="form-group">
+                        <?=$this->formrow($form->get('active'))?>
+                    </div>
+
+                  <?if (isset($viewplace)):?>
+                    <div class="form-group">
+                        <button name="action" class="btn btn-success pull-right" value="Save">Save</button>
+                        <button name="action" class="btn btn-danger pull-right mr-1" value="Delete" type="submit">Delete</button>
+                    </div>
+                    <?else:?>
+                      <div class="form-group">
+                          <button name="action" class="btn btn-warning btn-lg pull-right" value="Save">Create</button>
+                      </div>
+
+                  <?endif;?>
+
+                </div>
+        <?=$this->form()->closeTag($form)?>
+
+
+
+    </div>
+</div>

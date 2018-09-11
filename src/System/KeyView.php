@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Dao Xuan Thu
- * Date: 30-Aug-18
- * Time: 1:12 PM
- */
 
 namespace XT\Core\System;
 
@@ -26,4 +20,18 @@ class KeyView
     const key_value             = 'value';
     const prefix_html_start     = 'start_block_';
     const prefix_html_end       = 'end_html_';
+
+
+    public static function listEventTemplate() {
+         return [
+             self::prefix_html_start.self::HEADER,
+             self::prefix_html_end.self::HEADER,
+             self::prefix_html_start.self::NAVSIDEBAR,
+             self::prefix_html_end.self::NAVSIDEBAR,
+             self::prefix_html_start.self::CONTENTASIDE,
+             self::prefix_html_end.self::CONTENTASIDE,
+             self::prefix_html_start.self::FOOTER,
+             self::prefix_html_end.self::FOOTER,
+         ];
+    }
 }

@@ -1,10 +1,13 @@
 <?php
 namespace XT\Core;
 
+use XT\Core\Controller\Controller;
 use XT\Option\Service\Factory\OptionAccess;
 use XT\Option\Service\OptionManager;
+use Zend\ComponentInstaller\ConfigDiscovery\ConfigAggregator;
 use Zend\Debug\Debug;
 use Zend\EventManager\EventManager;
+use Zend\EventManager\LazyListenerAggregate;
 use Zend\Mvc\MvcEvent;
 use Zend\ServiceManager\ServiceManager;
 use Zend\ServiceManager\Tool\ConfigDumper;
@@ -20,15 +23,24 @@ class Module
         return include __DIR__ . '/../config/module.config.php';
     }
 
+//    /***
+//     * @param $e \Zend\ModuleManager\ModuleManager
+//     */
+//    public function init($e)
+//    {
+//       Common::$em = $e->getEventManager();
+//
+//    }
+
     public function onBootstrap(MvcEvent $e)
     {
         Common::set_error_handler();
         /***
          * @var $serviceManager ServiceManager
          */
-        Common::$sm             = $e->getApplication()->getServiceManager();
+        Common::$sm             = $serviceManager = $e->getApplication()->getServiceManager();
         Common::$app            = $e->getApplication();
-        Common::$em             = $e->getApplication()->getEventManager();
+        Common::$em             = $eventManager = $e->getApplication()->getEventManager();
         Common::$cf             = Common::$sm ->get(OptionAccess::class);
 
         //INIT / START SESSION
@@ -40,6 +52,30 @@ class Module
         $sessionManager->start();
 
 
+
+        //LISTENR GLOBAL
+        $lazyListenersDef = [];
+        if (isset(Common::$sm->get('config')['xtlabgloballistener'])) {
+            $listenercf = Common::$sm->get('config')['xtlabgloballistener'];
+            foreach ($listenercf as $listener => $events) {
+                $lz = 'lazy'.$listener;
+
+                Common::$sm->setFactory($lz, "\Application\GlobalListener\\$listener");
+                foreach ($events as $event)
+                    $lazyListenersDef[]=  [
+                        'listener' => $lz,
+                        'method'   => 'execute',
+                        'event'    => $event,
+                        'priority' => 0,
+                    ];
+            }
+        }
+
+
+
+        $lazyListeners = new LazyListenerAggregate($lazyListenersDef, Common::$sm);
+        $lazyListeners->attach($eventManager);
+
         //LISTENER DISPATCH
         Common::$em->attach("dispatch", function(MvcEvent $e) { Module::onDispatchController($e); }, -100); //-100
 
@@ -48,12 +84,16 @@ class Module
 
     public static function onDispatchController(MvcEvent $e) {
 
-        $target = $e->getTarget();
+        /***
+         * @var $controller Controller
+         */
+        $controller = $e->getTarget();
+
 
 
         //SET BLOCK HTML BY EVENT
         $routeMatch      = $e->getRouteMatch();
-        $controller_name =  $routeMatch->getParam('controller');
+        $controller_name = $routeMatch->getParam('controller');
         $action_name     = $routeMatch->getParam('action');
 
         //Function Register Event
@@ -75,6 +115,7 @@ class Module
         };
 
 
+        //READ CONFIG LISTENER INSERT HTML (InsertHtml, ViewPlace, BlockLayout)
         $config_merge = null;
         if (file_exists('config/listener_merge.cache1'))
         {
@@ -84,7 +125,7 @@ class Module
         {
             $config_merge['insert_html']   = file_exists('config/listener_insert_html.php')   ? include 'config/listener_insert_html.php' : [];
             $config_merge['insert_layout'] = file_exists('config/listener_insert_layout.php') ? include 'config/listener_insert_layout.php' : [];
-            $config_merge['insert_plugin'] = file_exists('config/listener_insert_plugin.php') ? include 'config/listener_insert_plugin.php' : [];
+            $config_merge['insert_viewplace'] = file_exists('config/insert_viewplace.php') ? include 'config/insert_viewplace.php' : [];
             $byte = file_put_contents('config/listener_merge.cache', serialize($config_merge));
             if ($byte === false)  throw new \Exception("Can not save: config/listener_merge.cache");
         }
@@ -113,7 +154,7 @@ class Module
         $regter_listener(
             $controller_name,'*',
             $config_merge['insert_html'],
-            function($event_name,&$phtml) use($e) { 
+            function($event_name,&$phtml) use($e) {
                 Common::register_event($event_name, null, $phtml);
             });
 
@@ -123,9 +164,9 @@ class Module
             'ALL',
             'ALL',
             $config_merge['insert_layout'],
-            function($k,&$v) use($e) {
+            function($k,&$v) use($controller) {
 
-                $e->getTarget()->setBlockView(['block' => $v],$k);
+                $controller->setBlockView(['block' => $v],$k);
             });
 
 
@@ -133,29 +174,27 @@ class Module
             $controller_name,
             $action_name,
             $config_merge['insert_layout'],
-            function($k,&$v) use($e) {
-                $e->getTarget()->setBlockView(['block' => $v],$k);
+            function($k,&$v) use($controller) {
+                $controller->setBlockView(['block' => $v],$k);
             });
 
-        $regter_listener($controller_name, '*',
+        $regter_listener(
+            $controller_name,
+            '*',
             $config_merge['insert_layout'],
-            function($k,&$v) use($e) {$e->getTarget()->setBlockView(['block' => $v],$k);});
+            function($k,&$v) use($controller) {
+                $controller->setBlockView(['block' => $v],$k);
+        });
 
-//        if ($action_name == 'not-found') {
-//            $regter_listener('ALL', 'notfound', $config_merge['insert_layout'], function($k,&$v) use($e) {$e->getTarget()->setBlockView(['block' => $v],$k);});
-//        }
-//
 
-//
-//
-//
-//        //$cf = include 'config/plugin-config.php';
-//        $regter_listener('ALL','ALL',  $config_merge['insert_plugin'],
-//            function($event_name,&$listenerclass) use($e) { Common::register_event($event_name, $listenerclass);});
-//        $regter_listener($controller_name,$action_name,$config_merge['insert_plugin'],
-//            function($event_name,&$listenerclass) use($e) { Common::register_event($event_name, $listenerclass);});
-//        $regter_listener($controller_name,'*',$config_merge['insert_plugin'],
-//            function($event_name,&$listenerclass) use($e) { Common::register_event($event_name, $listenerclass);});
+
+        //SET ViewPlace Listener
+        $regter_listener('ALL','ALL',  $config_merge['insert_viewplace'],
+            function($event_name,&$listenerclass) use($e) { Common::register_event($event_name, $listenerclass);});
+        $regter_listener($controller_name,$action_name,$config_merge['insert_viewplace'],
+            function($event_name,&$listenerclass) use($e) { Common::register_event($event_name, $listenerclass);});
+        $regter_listener($controller_name,'*',$config_merge['insert_viewplace'],
+            function($event_name,&$listenerclass) use($e) { Common::register_event($event_name, $listenerclass);});
 
 
     }

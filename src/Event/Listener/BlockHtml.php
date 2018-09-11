@@ -1,12 +1,14 @@
 <?php
 
-namespace XT\Core\Event;
+namespace XT\Core\Event\Listener;
 
 
+use XT\Core\Event\AbstractListener;
 use Zend\EventManager\EventInterface;
 
 /***
  * Class BlockHtml
+ * Listener render HTML for event sent in renderPlace plugin of VIEW
  * @package XT\Core\Event
  */
 class BlockHtml extends AbstractListener
@@ -14,7 +16,7 @@ class BlockHtml extends AbstractListener
     public $blockhtml = '';
 
     /**
-     * @param EventInterface $event : Have param [view]
+     * @param EventInterface $event : Have params [view], params[pageinfo]
      * @return string
      */
     public function execute(EventInterface $event)

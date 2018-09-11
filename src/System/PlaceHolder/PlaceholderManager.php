@@ -35,6 +35,23 @@ namespace XT\Core\System\Placeholder;
          })->toArray();
      }
 
+     public function allHolderSelectElements()
+     {
+
+         $holders = [];
+         /***
+          * @var $holder Placeholder
+          */
+         foreach ($this->allHolder() as $holder) {
+
+
+             $holders[$holder['name']]  = $holder['name'];
+         }
+
+         return $holders;
+     }
+
+
      public function allEvent()
      {
          $events = [];

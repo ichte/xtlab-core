@@ -1,0 +1,114 @@
+<?
+/**
+ * @var $this PhpRenderer
+ */
+?>
+<div class="p-4 w-100">
+    <?=$this->partial('dropdown_breadcrumbs',
+        [
+            'listplugins' => $listplugins,
+            'currentNameplugin' => $currentNameplugin,
+            'listactions' => $listactions,
+            'currentNameaction' => $currentNameaction
+        ])?>
+
+    <td class="p-1 w-100">
+        <strong>Listeners for placeholder</strong>
+
+
+        <?
+        $list = $this -> listeventblock;
+        $color = 0;
+        $control = '';
+        $action = '';
+        $getclass = function($c,$a) use (&$color, &$control,&$action)
+        {
+            if (($c != $control) || ($a != $action))
+            {
+                $control = $c;
+                $action = $a;
+                $color++;
+                if ($color > 1) $color = 0;
+            }
+            switch ($color)
+            {
+                case 0:
+                    return 'bg-light';
+                    break;
+                case 1:
+                    return '';
+                    break;
+            }
+
+            return '';
+
+        };
+
+        $controls= XT\Core\Common\Common::$sm->get('config')['controllers'];
+        $controller = [];
+        foreach ($controls as $key => $cc) {
+            if (!isset($controller[$key]))
+                $controller[$key] = [];
+            foreach ($cc as $k=>$c)
+                $controller[$key][$k] =  $c;
+
+        }
+        $ctrllist = [];
+        foreach ($controller as $ctrl)
+        {
+            $ctrllist = array_merge($ctrllist, $ctrl);
+        }
+
+        $existcontroller = function ($ctrl) use ($ctrllist)
+        {
+            return isset($ctrllist[$ctrl]);
+        };
+        $ctrl = '';
+        ?>
+       <table class="table table-sm" style="font-size: 14px;">
+            <tr>
+                <th>Controller</th>
+                <th>Action</th>
+                <th>Event</th>
+                <th>Plugin</th>
+            </tr>
+
+            <?foreach ($list as &$item) :?>
+                <?if ($ctrl != $item['Controller']) :?>
+                    <?$ctrl = $item['Controller']?>
+
+
+                <?endif?>
+                <tr class="<?=$getclass($item['Controller'],$item['Action'])?>">
+
+                    <td><a href="<?=$this->url('admin', ['plugin'=>'layout', 'act' => 'viewplaceedit', 'id' => $item['id']])?>"
+                                          style="color:<? if($item['active']) echo '#333'; else echo 'silver';?>"><?=$item['Controller']?></a>
+                        <?if (!($existcontroller($item['Controller']))) echo "<i class=\"fa fa-eye-slash\" aria-hidden=\"true\"></i>";?>
+                    </td>
+                    <td><?=$item['Action']?></td>
+                    <td><?=$item['Event']?></td>
+                    <td><?=$item['Class']?></td>
+                </tr>
+            <?endforeach?>
+
+       </table>
+
+
+        <div style="padding: 10px;float: right;">
+            <div class="btn-group">
+                <a class="btn btn-success" href="<?=$this->url('admin', ['plugin'=>'layout', 'act' => 'viewplaceadd'])?>"><?=' + '.$this->translate('Add')?></a>
+                <a class="btn btn-warning" href="<?=$this->url('admin', ['plugin'=>'layout', 'act' => 'applyviewplace'])?>"><?= $this->translate('Apply')?></a>
+            </div>
+        </div>
+        <div class="p-4 mt-4">
+            <h6>Default Listener ViewPlace</h6>
+            <ul style="font-size: 10px">
+                <?
+                foreach ($defaultplugins as $defaultplugin) {
+                    echo "<li>$defaultplugin[class]</li>";
+                }
+                ?>
+            </ul>
+        </div>
+    </div>
+

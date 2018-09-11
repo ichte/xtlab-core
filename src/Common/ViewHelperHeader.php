@@ -153,6 +153,7 @@ trait ViewHelperHeader
             ->appendHttpEquiv('X-UA-Compatible', 'IE=edge')
             ->appendHttpEquiv('Content-Language', 'vi')
             ->appendProperty('fb:app_id', '1565807193699425');
+        self::addCssInline('body {background:#e2e0d1}');
     }
 
 }

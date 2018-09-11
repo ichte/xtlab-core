@@ -1,0 +1,23 @@
+<?
+/**
+ * @var $this PhpRenderer
+ */
+?>
+<div class="w-100 pb-4">
+<h2 class="text-danger"><?=$this->translate('Administrator CP')?></h2>
+
+<div class="list-group w-100">
+
+<?foreach ($list as $key => $ar):?>
+    <a href="<?=$this->url('admin', ['plugin' => $key])?>" class="list-group-item list-group-item-action flex-column align-items-start">
+        <div class="d-flex w-100 justify-content-between">
+            <h5 class="mb-1"><?=$this->translate($ar['name'])?></h5>
+            <small class="text-muted"><?=$key?></small>
+        </div>
+        <p class="mb-1"><?=$this->translate($ar['description'])?></p>
+    </a>
+
+<?endforeach;?>
+
+</div>
+</div>

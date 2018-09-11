@@ -3,6 +3,7 @@
 namespace XT\Core\Event\BlockLayout;
 
 
+use XT\Core\Common\Common;
 use Zend\Db\Adapter\Adapter;
 use Zend\Db\Sql\Select;
 use Zend\Db\TableGateway\TableGateway;
@@ -55,7 +56,12 @@ class BlockLayoutManager
 
     public function insertnew($data)
     {
+
+        if (isset($data['id']))
+            unset($data['id']);
+
         $id = $this->tableBlocklayout->insert($data);
+
         $this->exportconfig();
         return $this->tableBlocklayout->getLastInsertValue();
     }
@@ -95,6 +101,7 @@ class BlockLayoutManager
         $writer->toFile('config/listener_insert_layout.php', $config);
         if (file_exists('config/listener_merge.cache'))
             unlink('config/listener_merge.cache');
+        Common::removeCacheMapConfig();
 
     }
 
